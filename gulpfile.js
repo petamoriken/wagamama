@@ -57,8 +57,8 @@ gulp.task("component", () => {
                 to: "component/style.css"
             }).then(result => {
                 fs.writeFileSync(outputPath, result); 
-            })
-        })
+            });
+        });
 });
 
 gulp.task("watch", () => {

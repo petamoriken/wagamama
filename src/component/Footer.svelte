@@ -92,12 +92,12 @@
 
         footer > dl > dt {
             width: 165px;
-            flex-basis: 0;
+            flex-basis: auto;
         }
 
         footer > dl > dd {
             margin-top: 0;
-            flex-basis: 0 !important;           
+            flex-basis: auto !important;           
         }
 
         dd > dl {

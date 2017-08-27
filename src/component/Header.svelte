@@ -2,13 +2,13 @@
     <div class="wrapper">
         <a href="./"><img src="img/logo.png"></a>
         {{ #if isMobileView }}
-            <button on:tap="set({ isMenuOpen: !isMenuOpen })"><img src="img/sp/button_menu.png" alt="メニューボタン"></button>
+            <button on:tap="set({ isMenuOpen: !isMenuOpen })"><img src="img/button/menu.png" alt="メニューボタン"></button>
         {{ /if }}
         <nav hidden={{ isMobileView && !isMenuOpen }}>
             <ul role={{ isMobileView ? "menu" : "" }}>
                 {{ #each items as item }}
                     <li role={{ isMobileView ? "menuitem" : "" }}>
-                        <a href="{{ item.id }}.html"><img src="img/button_{{ item.id }}.png" alt={{ item.alt }}></a>
+                        <a href="{{ item.id }}.html"><img src="img/button/{{ item.id }}.png" alt={{ item.alt }}></a>
                     </li>
                 {{ /each }}
             </ul>
@@ -47,7 +47,7 @@
     }
 
     button {
-        width: 52px;
+        width: 54px;
         height: 52px;
         padding: 0;
         border: 0;
