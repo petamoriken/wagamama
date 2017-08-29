@@ -1,17 +1,17 @@
 <main>
+    <style ref:style></style>
     <div class="wrapper">
         <h1><img src="img/heading/character.png" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ listIndex: listIndex-1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
-            <button on:tap="set({ listIndex: listIndex+1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow-1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow+1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
             <menu ref:characters>
                 {{ #each characters as character, index }}
                     <li role="munuitemradio" aria-selected="{{ index === current }}"><a href="#{{ character.id }}"><img src="img/character/chip/{{ character.id }}.png" alt="{{ character.alt }} キャラチップ"></a></li>
                 {{ /each }}
             </menu>
         </nav>
-
     </div>
 </main>
 
@@ -70,19 +70,24 @@
         overflow: hidden;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-around;
         padding: 0 80px;
+        font-size: 0;
     }
 
     li {
         margin: 0;
         padding: 0;
+        flex-grow: 1;
     }
 
     li > button {
         padding: 0;
         border: 0;
         background: unset;
+    }
+
+    li img {
+        vertical-align: top;
     }
 
     li[aria-selected="false"] img {
@@ -100,7 +105,7 @@
     export default {
         data() {
             return {
-                listIndex: 0,
+                displayedListRow: 0,
                 displayedMaxListItem: 6,
                 current: 0,
                 characters: [
@@ -135,17 +140,17 @@
         },
 
         methods: {
-            listIndexSubscibe(listIndex) {
+            displayedListRowSubsciber(displayedListRow) {
                 const element = this.refs.characters;
                 const height = element.firstElementChild.clientHeight
-                const length = element.scrollHeight / height;
+                const length = element.scrollHeight / height | 0;
 
-                listIndex %= length;
-                if(listIndex < 0) {
-                    listIndex += length;
+                displayedListRow %= length;
+                if(displayedListRow < 0) {
+                    displayedListRow += length;
                 }
 
-                element.scrollTop = height * listIndex;
+                element.scrollTop = height * displayedListRow;
             },
 
             refreshDisplayedListItem() {
@@ -159,17 +164,31 @@
                 const displayedMaxListItem = (width - paddingLeft - paddingRight) / imageWidth | 0;
 
                 if(this.get("displayedMaxListItem") !== displayedMaxListItem) {
+                    const rest = displayedMaxListItem - this.get("characters").length % displayedMaxListItem;
+                    this.refs.style.textContent = `menu::after { content: ""; flex: ${ rest } 1 ${ (imageWidth + 1) * rest }px; }`;
                     this.set({ displayedMaxListItem });
                 }
             }
         },
 
         oncreate() {
-            const index = this.get("characters").findIndex(children => `#${ children.id }` === location.hash);
-            this.current = index !== -1 ? index : 0;
-            
             this.refreshDisplayedListItem();
-            this.observe("listIndex", this.listIndexSubscibe, { init: false });
+            this.observe("displayedListRow", this.displayedListRowSubsciber, { init: false });
+
+            const index = this.get("characters").findIndex(children => `#${ children.id }` === location.hash);
+            if(index !== -1) {
+                this.set({
+                    current: index
+                });
+                // delay for scrollHeight
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        this.set({
+                            displayedListRow: index / this.get("displayedMaxListItem") | 0
+                        });
+                    });
+                });
+            }
         },
 
         events: {
