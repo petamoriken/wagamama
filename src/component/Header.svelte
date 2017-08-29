@@ -121,6 +121,15 @@
             }
         },
 
+        oncreate() {
+            const handler = this.boundResizeHandler = e => this.resizeHandler(e);
+            window.addEventListener("resize", handler);
+        },
+
+        ondestroy() {
+            window.removeEventListener("resize", this.boundResizeHandler);
+        },
+
         events: {
             tap(node, callback) {
                 if("ontouchstart" in window) {
@@ -162,15 +171,6 @@
                     };
                 }
             }
-        },
-
-        oncreate() {
-            const handler = this.boundResizeHandler = e => this.resizeHandler(e);
-            window.addEventListener("resize", handler);
-        },
-
-        ondestroy() {
-            window.removeEventListener("resize", this.boundResizeHandler);
         }
     };
 </script>

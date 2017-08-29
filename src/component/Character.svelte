@@ -2,15 +2,16 @@
     <div class="wrapper">
         <h1><img src="img/heading/character.png" alt="キャラクター"></h1>
         <hr>
-        <div>
-            <button on:tap="set({ index: index-1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
-            <button on:tap="set({ index: index+1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
-            <ul ref:characters>
-                {{ #each characters as character }}
-                    <li><img src="img/character/chip/{{ character.id }}.png" alt="{{ character.alt }} キャラチップ"></li>
+        <nav>
+            <button on:tap="set({ listIndex: listIndex-1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
+            <button on:tap="set({ listIndex: listIndex+1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
+            <menu ref:characters>
+                {{ #each characters as character, index }}
+                    <li role="munuitemradio" aria-selected="{{ index === current }}"><a href="#{{ character.id }}"><img src="img/character/chip/{{ character.id }}.png" alt="{{ character.alt }} キャラチップ"></a></li>
                 {{ /each }}
-            </ul>
-        </div>
+            </menu>
+        </nav>
+
     </div>
 </main>
 
@@ -39,29 +40,30 @@
         background: url("img/border.png");
     }
 
-    .wrapper > div {
+    nav {
         margin: 47px 0 0;
         position: relative;
     }
 
-    button {
+    nav > button {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         padding: 0;
         border: 0;
         background: unset;
+        cursor: pointer;
     }
 
-    button:nth-of-type(1) {
+    nav > button:nth-of-type(1) {
         left: 10px;
     }
 
-    button:nth-of-type(2) {
+    nav > button:nth-of-type(2) {
         right: 10px;
     }
 
-    ul {
+    menu {
         width: 100%;
         height: 128px;
         box-sizing: border-box;
@@ -76,13 +78,31 @@
         margin: 0;
         padding: 0;
     }
+
+    li > button {
+        padding: 0;
+        border: 0;
+        background: unset;
+    }
+
+    li[aria-selected="false"] img {
+        opacity: 0.8;
+    }
+
+    li[aria-selected="false"] img:hover {
+        opacity: 1;
+    }
 </style>
 
 <script>
+    const imageWidth = 128;
+
     export default {
         data() {
             return {
-                index: 0,
+                listIndex: 0,
+                displayedMaxListItem: 6,
+                current: 0,
                 characters: [
                     { id: "alice", alt: "アリス", description: "キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文" },
                     { id: "chishier", alt: "チシャ", description: "キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文" },
@@ -112,6 +132,44 @@
                     { id: "seedle", alt: "シードル", description: "キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文キャラクターの紹介文" }
                 ]
             };
+        },
+
+        methods: {
+            listIndexSubscibe(listIndex) {
+                const element = this.refs.characters;
+                const height = element.firstElementChild.clientHeight
+                const length = element.scrollHeight / height;
+
+                listIndex %= length;
+                if(listIndex < 0) {
+                    listIndex += length;
+                }
+
+                element.scrollTop = height * listIndex;
+            },
+
+            refreshDisplayedListItem() {
+                const element = this.refs.characters;
+                const width = element.offsetWidth;
+
+                const style = getComputedStyle(element);
+                const paddingLeft = Number.parseFloat(style.paddingLeft);
+                const paddingRight = Number.parseFloat(style.paddingRight);
+
+                const displayedMaxListItem = (width - paddingLeft - paddingRight) / imageWidth | 0;
+
+                if(this.get("displayedMaxListItem") !== displayedMaxListItem) {
+                    this.set({ displayedMaxListItem });
+                }
+            }
+        },
+
+        oncreate() {
+            const index = this.get("characters").findIndex(children => `#${ children.id }` === location.hash);
+            this.current = index !== -1 ? index : 0;
+            
+            this.refreshDisplayedListItem();
+            this.observe("listIndex", this.listIndexSubscibe, { init: false });
         },
 
         events: {
@@ -155,21 +213,6 @@
                     };
                 }
             }
-        },
-
-        oncreate() {
-            this.observe("index", function(index) {
-                const element = this.refs.characters;
-                const height = element.firstElementChild.clientHeight
-                const length = element.scrollHeight / height;
-
-                index %= length;
-                if(index < 0) {
-                    index += length;
-                }
-
-                element.scrollTo(0, height * index);
-            }, { init: false });
         }
     };
 </script>
