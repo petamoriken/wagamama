@@ -11,7 +11,7 @@ main {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: url("../img/title_background.png") center/cover;
+    background: url("../img/background/main.png") center/cover;
 }
 
 h1 {

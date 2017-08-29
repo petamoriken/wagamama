@@ -21,7 +21,7 @@
     header {
         width: 100%;
         position: absolute;
-        background: url("img/nav_background.png") repeat-x 0 calc(100% - 10px);
+        background: url("img/background/header.png") repeat-x 0 calc(100% - 10px);
     }
 
     [hidden] {
