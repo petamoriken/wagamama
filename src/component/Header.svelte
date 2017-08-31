@@ -22,6 +22,7 @@
         width: 100%;
         position: absolute;
         background: url("img/background/header.png") repeat-x 0 calc(100% - 10px);
+        z-index: 1000;
     }
 
     [hidden] {
@@ -158,9 +159,7 @@
                         }
                     };
                 } else {
-                    const onclick = e => {
-                        callback(e);
-                    }
+                    const onclick = e => callback(e);
 
                     node.addEventListener("click", onclick);
 

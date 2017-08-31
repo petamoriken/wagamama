@@ -53,7 +53,7 @@
         align-items: center;
         flex-basis: 25%;
         margin: 6px 0;
-        color: #eee;        
+        color: #eee;
     }
 
     footer > dl > dd:nth-of-type(2n) {
@@ -97,7 +97,7 @@
 
         footer > dl > dd {
             margin-top: 0;
-            flex-basis: auto !important;           
+            flex-basis: auto !important;
         }
 
         dd > dl {
