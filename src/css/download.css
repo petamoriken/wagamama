@@ -4,8 +4,100 @@ html, body {
     background: #111;
 }
 
+main > .wrapper {
+    width: 100%;
+    margin: 0 auto;
+    padding: 60px 0 0;
+}
+
+main h1 {
+    margin: 0 0 0 20px;
+}
+
+main hr {
+    width: 100%;
+    height: 27px;
+    position: absolute;
+    left: 0;
+    margin: 0;
+    border: 0;
+    background: url("../img/border.png");
+}
+
+section {
+    margin: 50px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+section h2 {
+    text-align: center;
+    margin: 10px 0;
+}
+
+#download {
+    width: 370px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+section h3 {
+    margin: 20px 0 10px;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+section dl {
+    margin: 0 0 0 1em;
+    line-height: 1.75em;
+}
+
+section dt, section dd {
+    display: inline;
+    margin: 0;
+}
+
+section dt::after {
+    content: ":";
+}
+
+section dd::after {
+    content: "\000A";
+    white-space: pre-wrap;
+}
+
 @media screen and (max-width: 740px) {
     html, body {
         min-width: 0;
+    }
+
+    section {
+        flex-direction: column;
+    }
+
+    section div {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    section img {
+        max-width: 90%;
+    }
+
+    #download {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    section h3 {
+        text-align: center;
+    }
+
+    section dl {
+        margin: 0;
+        text-align: center;
     }
 }

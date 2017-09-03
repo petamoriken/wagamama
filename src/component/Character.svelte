@@ -36,7 +36,7 @@
     }
 
     .wrapper {
-        width: 1100px;
+        width: 100%;
         margin: 0 auto;
         padding: 60px 0 0;
     }
@@ -165,10 +165,6 @@
     }
 
     @media screen and (max-width: 740px) {
-        .wrapper {
-            width: 100%;
-        }
-
         menu {
             padding: 0 55px;
         }

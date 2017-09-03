@@ -4,8 +4,96 @@ html, body {
     background: #111;
 }
 
+#heading {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: url("../img/background/alice.png") center/cover;
+}
+
+h1 {
+    position: absolute;
+    text-align: center;
+    left: 10%;
+    top: 70px;
+}
+
+#subheading {
+    width: 100%;
+    background: url("../img/background/world.png") center/cover;
+}
+
+#subheading > .wrapper {
+    width: 1100px;
+    height: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+#subheading > .wrapper div {
+    margin: 20px 0;
+}
+
+#subheading > .wrapper div:last-of-type {
+    align-self: flex-end;
+}
+
+#subheading p {
+    width: 350px;
+    color: white;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.7);
+    line-height: 1.5em;
+    padding: 10px 20px;
+}
+
+h2 {
+    margin: 0;
+}
+
 @media screen and (max-width: 740px) {
     html, body {
         min-width: 0;
+    }
+
+    #heading {
+        background-position-x: 75%;
+    }
+
+    h1 {
+        width: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    h1 > img {
+        max-width: 90%;
+    }
+
+    #subheading > .wrapper {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+    }
+
+    #subheading > .wrapper div {
+        width: 100%;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    h2 > img {
+        max-width: 90%;
+    }
+
+    #subheading p {
+        width: 100%;
+        padding: 10px 40px;
     }
 }
