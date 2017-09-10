@@ -81,7 +81,7 @@
 
     menu {
         width: 100%;
-        height: 128px;
+        height: 80px;
         box-sizing: border-box;
         overflow: hidden;
         display: flex;
@@ -121,6 +121,7 @@
         margin: 0 0 -50px;
         display: flex;
         align-items: flex-start;
+        justify-content: space-around;
     }
 
     figcaption {
@@ -153,8 +154,8 @@
 
     .description {
         width: 360px;
-        height: 270px;
-        padding: 70px 40px 25px;
+        height: 244px;
+        padding: 40px 40px 25px;
         color: black;
         box-sizing: border-box;
         background: url("img/comment.png");
@@ -199,7 +200,7 @@
 </style>
 
 <script>
-    const imageWidth = 129;
+    const imageWidth = 81;
 
     function requestAfterAnimationFrame(callback) {
         requestAnimationFrame(function() {
