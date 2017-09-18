@@ -226,6 +226,7 @@
 </style>
 
 <script>
+    const swipeThreshold = 30;
     const imageWidth = 81;
     const characters = Object.freeze([
         { id: "alice", name: { ja: "アリス", en: "Alice" }, cv: "新藤若菜", description: "主人公の魔女。わがままでいいかげんな性格で、領主の仕事を放り出していつも町でフラフラしている。しかし、ある事件がきっかけで世界を巻き込む戦争に身を投じる事になる。" },
@@ -371,21 +372,15 @@
                 if("ontouchstart" in window) {
                     const ontouchstart = e => {
                         const x = e.touches[0].clientX;
-                        console.log(x);
-
-                        /*
-                        const ontouchmove = e => {
-                            isTap = false;
-                        }
-                        node.addEventListener("touchmove", ontouchmove);
 
                         node.addEventListener("touchend", e => {
-                            if(isTap) {
-                                callback(e);
+                            const dx = e.changedTouches[0].clientX - x;
+                            if(dx < -swipeThreshold) {
+                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
+                            } else if(dx > swipeThreshold) {
+                                this.set({ displayedListRow: this.get("displayedListRow") + 1 });
                             }
-                            node.removeEventListener("touchmove", ontouchmove);
                         }, { once: true });
-                        */
                     }
                     node.addEventListener("touchstart", ontouchstart);
 
