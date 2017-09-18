@@ -48,7 +48,6 @@ gulp.task("component", () => {
                 fs.writeFileSync(outputPath, "");
                 return;
             }
-                
             postcss([
                 url({ url: "rebase" }),
                 autoprefixer
@@ -56,7 +55,7 @@ gulp.task("component", () => {
                 from: "style.css",
                 to: "component/style.css"
             }).then(result => {
-                fs.writeFileSync(outputPath, result); 
+                fs.writeFileSync(outputPath, result);
             });
         });
 });

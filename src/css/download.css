@@ -5,9 +5,10 @@ html, body {
 }
 
 main > .wrapper {
-    width: 100%;
+    width: 1100px;
     margin: 0 auto;
     padding: 60px 0 0;
+    color: white;
 }
 
 main h1 {
@@ -26,7 +27,6 @@ main hr {
 
 section {
     margin: 50px 0;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -72,6 +72,10 @@ section dd::after {
 @media screen and (max-width: 740px) {
     html, body {
         min-width: 0;
+    }
+
+    main > .wrapper {
+        width: 100%;
     }
 
     section {
