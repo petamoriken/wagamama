@@ -7,11 +7,15 @@
             <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
             <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
-                <div>
+                <div on:swipe>
                     {{ #each characterRowItems as row, i }}
                         <div>
                             {{ #each row as character, j }}
-                                <li role="munuitemradio" aria-selected="{{ current === i * characterRowItems[0].length + j }}"><a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}"><img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ"></a></li>
+                                <li role="munuitemradio" aria-selected="{{ current === i * characterRowItems[0].length + j }}">
+                                    <a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}">
+                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ">
+                                    </a>
+                                </li>
                             {{ /each }}
                         </div>
                     {{ /each }}
@@ -95,12 +99,10 @@
     }
 
     menu > div {
-        width: 300%;
         height: 100%;
     }
 
     menu > div > div {
-        width: 33.3%;
         height: 100%;
         display: flex;
         float: left;
@@ -127,8 +129,10 @@
         opacity: 0.6;
     }
 
-    li[aria-selected="false"] img:hover {
-        opacity: 1;
+    @media screen and (min-width: 740px) {
+        li[aria-selected="false"] img:hover {
+            opacity: 1;
+        }
     }
 
     figure {
@@ -148,6 +152,7 @@
         flex-direction: column;
         align-items: center;
         margin: 180px 0 0;
+        transform: translateX(100px);
     }
 
     h2 {
@@ -188,6 +193,10 @@
             width: 100%;
         }
 
+        menu {
+            width: calc(100% - 100px);
+        }
+
         figure {
             top: auto;
             margin: 20px 0 0;
@@ -196,8 +205,10 @@
         }
 
         figcaption {
+            align-self: center;
             max-width: 80%;
             margin-top: 0;
+            transform: none;
         }
 
         .description {
@@ -208,7 +219,8 @@
         }
 
         figure > img {
-            max-width: 95%;
+            max-width: 100%;
+            margin-bottom: 150px;
         }
     }
 </style>
@@ -223,7 +235,7 @@
         { id: "triaina", name: { ja: "トリアイナ", en: "Triaina" }, cv: "新藤若菜", description: "北西の氷に覆われた領地を治める領主。氷の魔法を操る魔女で、性格もドライでクール。オリヴィア、ヘレンとは仲がよく、３人でいつもお茶会をしている。" },
         { id: "orivia", name: { ja: "オリヴィア", en: "Orivia" }, cv: "調子ぶっこき丸", description: "西の領地を収める領主。回復魔法が得意な魔女で、気が弱くおっとりした性格。少し天然なところがあり、ヘレンやトリアイナを呆れされることもしばしば。" },
         { id: "helen", name: { ja: "ヘレン", en: "Helen" }, cv: "Nagano,M.", description: "トリアイナの部下で、オリヴィアの友人。実は人魚で、水中では下半身が魚の姿になる。素直な性格で、オリヴィアの天然な行動にツッコんだり、トリアイナのドライな態度に反発したりすることもある。" },
-        { id: "dood", name: { ja: "ドード", en: "Dood" }, cv: "titi", description: "オリヴィアの部下のナイフ使い。最近オリヴィアの部下になった。イヒヒッ！　という気味の悪い含み笑いをする。" },
+        { id: "dood", name: { ja: "ドード", en: "Dood" }, cv: "titi", description: "オリヴィアの部下のナイフ使い。最近オリヴィアの部下になった。イヒヒッ！ という気味の悪い含み笑いをする。" },
         { id: "karton", name: { ja: "カートン", en: "Karton" }, cv: "タピオカ", description: "オリヴィアの部下で、黄金の鎧を身にまとった戦士。昔受けた傷が元で声を失った。オリヴィアとは筆談でなんとかコミュニケーションを取っている。" },
         { id: "marger", name: { ja: "マルゲル", en: "Marger" }, cv: "titi", description: "吹雪で遭難していたところをトリアイナたちに助けられた旅の吟遊詩人。助けてもらった恩を返すため、トリアイナたちを助けることになる。" },
         { id: "charlotte", name: { ja: "シャルロッテ", en: "Charlotte" }, cv: "苗好りか", description: "東の領地の領主。高名な魔女の流派、ロレーヌ一派の頭首でもある魔女。物腰の柔らかい上品な出で立ちだが、一派の看板を背負い、日々プレッシャーと戦っているようだ。" },
@@ -243,6 +255,12 @@
         { id: "eri", name: { ja: "エリ", en: "Eri" }, cv: "霜月", description: "ヴェロニカの部下の少女。腹が立つと部下のシードルを蹴りまくるドSの女王様な一面を持つ。人間だが魔法が使える不思議な少女。彼女には、外には言えない秘密があるようだが……？" },
         { id: "seedle", name: { ja: "シードル", en: "Seedle" }, cv: "ばすにゃん", description: "エリの部下で硬い殻に覆われたシードラウトという種族の植物人。エリによくいびられているが、本人は幸せそう。" }
     ]);
+
+    function requestAfterAnimationFrame(callback) {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(callback);
+        });
+    }
 
     export default {
         data() {
@@ -268,7 +286,6 @@
         methods: {
             displayedListRowSubsciber(displayedListRow) {
                 const element = this.refs.menu;
-                const width = element.offsetWidth;
                 const length = this.get("characterRowItems").length;
 
                 displayedListRow %= length;
@@ -276,7 +293,9 @@
                     displayedListRow += length;
                 }
 
-                element.scrollLeft = width * displayedListRow;
+                requestAfterAnimationFrame(() => {
+                    element.scrollLeft = element.offsetWidth * displayedListRow;
+                });
             },
 
             refreshDisplayedListItem() {
@@ -288,7 +307,8 @@
                 if(this.get("displayedMaxListItem") !== displayedMaxListItem) {
                     this.set({ displayedMaxListItem });
 
-                    const rowNum = this.get("characterRowItems").length;
+                    const characterRowItems = this.get("characterRowItems");
+                    const rowNum = characterRowItems.length;
 
                     // menu > div の width を合わせる
                     const outerDivide = element.firstElementChild;
@@ -301,7 +321,7 @@
 
                     // 最後の行を左寄せにする
                     if(displayedMaxListItem !== 1) {
-                        const rest = displayedMaxListItem - this.get("characters").length % displayedMaxListItem;
+                        const rest = displayedMaxListItem - characterRowItems[characterRowItems.length - 1].length;
                         this.refs.style.textContent = `main menu > div > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
                     } else {
                         this.refs.style.textContent = "";
@@ -311,13 +331,14 @@
         },
 
         oncreate() {
-            this.refreshDisplayedListItem();
-
-            // arrow がクリックされて displayedListRow が変更されるのを監視する
+            // arrow がクリックされたり、swipe されて displayedListRow が変更されるのを監視する
             this.observe("displayedListRow", this.displayedListRowSubsciber, { init: false });
 
+            // menu の表示領域を確認して、displayedMaxListItem を変更したり style を変える
+            this.refreshDisplayedListItem();
+
             // location.href で初期値の設定
-            const index = this.get("characters").findIndex(children => `#${ children.id }` === location.hash);
+            const index = characters.findIndex(children => `#${ children.id }` === location.hash);
             if(index !== -1) {
                 this.set({
                     current: index
@@ -335,6 +356,7 @@
 
                 this.refreshDisplayedListItem();
                 element.scrollLeft = element.offsetWidth * this.get("displayedListRow");
+
                 oldWidth = currentWidth;
             }
             window.addEventListener("resize", resizeHandler);
@@ -345,6 +367,36 @@
         },
 
         events: {
+            swipe(node, callback) {
+                if("ontouchstart" in window) {
+                    const ontouchstart = e => {
+                        const x = e.touches[0].clientX;
+                        console.log(x);
+
+                        /*
+                        const ontouchmove = e => {
+                            isTap = false;
+                        }
+                        node.addEventListener("touchmove", ontouchmove);
+
+                        node.addEventListener("touchend", e => {
+                            if(isTap) {
+                                callback(e);
+                            }
+                            node.removeEventListener("touchmove", ontouchmove);
+                        }, { once: true });
+                        */
+                    }
+                    node.addEventListener("touchstart", ontouchstart);
+
+                    return {
+                        teardown() {
+                            node.removeEventListener("touchstart", ontouchstart);
+                        }
+                    };
+                }
+            },
+
             tap(node, callback) {
                 if("ontouchstart" in window) {
                     const ontouchstart = e => {
