@@ -11,7 +11,7 @@
                     {{ #each characterRowItems as row, i }}
                         <div>
                             {{ #each row as character, j }}
-                                <li role="munuitemradio" aria-selected="{{ current === i * row.length + j }}"><a on:tap="set({ current: i * row.length + j })" href="#{{ character.id }}"><img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ"></a></li>
+                                <li role="munuitemradio" aria-selected="{{ current === i * characterRowItems[0].length + j }}"><a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}"><img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ"></a></li>
                             {{ /each }}
                         </div>
                     {{ /each }}
@@ -268,15 +268,15 @@
         methods: {
             displayedListRowSubsciber(displayedListRow) {
                 const element = this.refs.menu;
-                const height = element.firstElementChild.clientHeight
-                const length = element.scrollHeight / height | 0;
+                const width = element.offsetWidth;
+                const length = this.get("characterRowItems").length;
 
                 displayedListRow %= length;
                 if(displayedListRow < 0) {
                     displayedListRow += length;
                 }
 
-                element.scrollTop = height * displayedListRow;
+                element.scrollLeft = width * displayedListRow;
             },
 
             refreshDisplayedListItem() {
@@ -292,7 +292,7 @@
 
                     // menu > div の width を合わせる
                     const outerDivide = element.firstElementChild;
-                    outerDivide.style.width = `${ 100 * rowNum }%`
+                    outerDivide.style.width = `${ 100 * rowNum }%`;
 
                     // menu > div > div の width を合わせる
                     for(const div of outerDivide.children) {
@@ -302,7 +302,7 @@
                     // 最後の行を左寄せにする
                     if(displayedMaxListItem !== 1) {
                         const rest = displayedMaxListItem - this.get("characters").length % displayedMaxListItem;
-                        this.refs.style.textContent = `main menu > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
+                        this.refs.style.textContent = `main menu > div > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
                     } else {
                         this.refs.style.textContent = "";
                     }
@@ -332,7 +332,9 @@
                 if(currentWidth === oldWidth) {
                     return;
                 }
+
                 this.refreshDisplayedListItem();
+                element.scrollLeft = element.offsetWidth * this.get("displayedListRow");
                 oldWidth = currentWidth;
             }
             window.addEventListener("resize", resizeHandler);
@@ -351,7 +353,6 @@
                         const ontouchmove = e => {
                             isTap = false;
                         }
-
                         node.addEventListener("touchmove", ontouchmove);
 
                         node.addEventListener("touchend", e => {
@@ -361,7 +362,6 @@
                             node.removeEventListener("touchmove", ontouchmove);
                         }, { once: true });
                     }
-
                     node.addEventListener("touchstart", ontouchstart);
 
                     return {
@@ -371,7 +371,6 @@
                     };
                 } else {
                     const onclick = e => callback(e);
-
                     node.addEventListener("click", onclick);
 
                     return {
