@@ -7,9 +7,15 @@
             <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
             <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
-                {{ #each characters as character, index }}
-                    <li role="munuitemradio" aria-selected="{{ index === current }}"><a on:tap="set({ current: index })" href="#{{ character.id }}"><img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ"></a></li>
-                {{ /each }}
+                <div>
+                    {{ #each characterRowItems as row, i }}
+                        <div>
+                            {{ #each row as character, j }}
+                                <li role="munuitemradio" aria-selected="{{ current === i * row.length + j }}"><a on:tap="set({ current: i * row.length + j })" href="#{{ character.id }}"><img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ"></a></li>
+                            {{ /each }}
+                        </div>
+                    {{ /each }}
+                </div>
             </menu>
         </nav>
         <figure>
@@ -80,14 +86,24 @@
     }
 
     menu {
-        width: 100%;
+        width: calc(100% - 160px);
         height: 80px;
-        box-sizing: border-box;
         overflow: hidden;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0 80px;
+        padding: 0;
+        margin: 0 auto;
         font-size: 0;
+    }
+
+    menu > div {
+        width: 300%;
+        height: 100%;
+    }
+
+    menu > div > div {
+        width: 33.3%;
+        height: 100%;
+        display: flex;
+        float: left;
     }
 
     li {
@@ -172,10 +188,6 @@
             width: 100%;
         }
 
-        menu {
-            padding: 0 55px;
-        }
-
         figure {
             top: auto;
             margin: 20px 0 0;
@@ -244,7 +256,7 @@
 
         computed: {
             displayedListRow: (current, displayedMaxListItem) => current / displayedMaxListItem | 0,
-            rowCharacters: (characters, displayedMaxListItem) => {
+            characterRowItems: (characters, displayedMaxListItem) => {
                 const ret = [];
                 for(let i = 0, l = Math.ceil(characters.length / displayedMaxListItem); i < l; ++i) {
                     ret.push(characters.slice(i * displayedMaxListItem, (i + 1) * displayedMaxListItem));
@@ -271,19 +283,26 @@
                 const element = this.refs.menu;
                 const width = element.offsetWidth;
 
-                const style = getComputedStyle(element);
-                const paddingLeft = Number.parseFloat(style.paddingLeft);
-                const paddingRight = Number.parseFloat(style.paddingRight);
-
-                const displayedMaxListItem = (width - paddingLeft - paddingRight) / imageWidth | 0;
+                const displayedMaxListItem = width / imageWidth | 0;
 
                 if(this.get("displayedMaxListItem") !== displayedMaxListItem) {
                     this.set({ displayedMaxListItem });
 
+                    const rowNum = this.get("characterRowItems").length;
+
+                    // menu > div の width を合わせる
+                    const outerDivide = element.firstElementChild;
+                    outerDivide.style.width = `${ 100 * rowNum }%`
+
+                    // menu > div > div の width を合わせる
+                    for(const div of outerDivide.children) {
+                        div.style.width = `calc(100% / ${ rowNum })`;
+                    }
+
                     // 最後の行を左寄せにする
                     if(displayedMaxListItem !== 1) {
                         const rest = displayedMaxListItem - this.get("characters").length % displayedMaxListItem;
-                        this.refs.style.textContent = `main menu::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
+                        this.refs.style.textContent = `main menu > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
                     } else {
                         this.refs.style.textContent = "";
                     }
