@@ -1,6 +1,6 @@
 <header class={{ isMenuOpen ? "open" : "" }}>
     <div class="wrapper">
-        <a href="./"><img src="img/logo.png"></a>
+        <a href="./"><img src="img/accessory/logo.png"></a>
         {{ #if isMobileView }}
             <button on:tap="set({ isMenuOpen: !isMenuOpen })"><img src="img/button/menu.png" alt="メニューボタン"></button>
         {{ /if }}

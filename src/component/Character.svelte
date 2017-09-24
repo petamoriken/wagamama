@@ -4,8 +4,8 @@
         <h1><img src="img/heading/character.png" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/arrow_left.png" alt="左へ移動"></button>
-            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/arrow_right.png" alt="右へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" alt="左へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
                 <div on:swipe>
                     {{ #each characterRowItems as row, i }}
@@ -62,7 +62,7 @@
         left: 0;
         margin: 0;
         border: 0;
-        background: url("img/border.png");
+        background: url("img/accessory/border.png");
     }
 
     nav {
@@ -181,7 +181,7 @@
         padding: 40px 40px 25px;
         color: black;
         box-sizing: border-box;
-        background: url("img/comment.png");
+        background: url("img/accessory/comment.png");
     }
 
     .description > p {
