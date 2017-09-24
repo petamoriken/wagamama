@@ -70,6 +70,10 @@
     p {
         line-height: 1.7em;
     }
+
+    .thumbnail img {
+        margin: 0 5px;
+    }
 </style>
 
 <script>
@@ -92,8 +96,24 @@
                                 { src: "img/thumbnail/system_field02.png", alt: "マップ画面2" },
                                 { src: "img/thumbnail/system_field03.png", alt: "マップ画面3" }
                             ]
+                        },
+                        {
+                            heading: { src: "img/text/system_field02.png", alt: "軍団を強化しよう" },
+                            texts: ["敵の領地を新訳するために自分の軍団を強くする必要があります。", "経験値をためてレベルを上げたり、兵士の数を増やしたり、装備を変えたりとユニットをカスタマイズして軍団を強くしよう。"],
+                            images: [
+                                { src: "img/thumbnail/system_field04.png", alt: "軍団拡張画面1" },
+                                { src: "img/thumbnail/system_field05.png", alt: "軍団拡張画面2" },
+                            ]
+                        },
+                        {
+                            heading: { src: "img/text/system_field03.png", alt: "軍団を強化しよう" },
+                            texts: ["メニュー画面から町へ繰り出すことができます。", "町では装備や戦闘の役に立つカードを購入できたり、キャラクターたちのショートエピソードを楽しむことが出来ます。"],
+                            images: [
+                                { src: "img/thumbnail/system_field06.png", alt: "町へ行く" },
+                                { src: "img/thumbnail/system_field07.png", alt: "" },
+                                { src: "img/thumbnail/system_field08.png", alt: "" },
+                            ]
                         }
-
                     ]
                 }
             };
