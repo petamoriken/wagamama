@@ -9,7 +9,7 @@
             <menu ref:menu type="toolbar">
                 <div on:swipe>
                     {{ #each characterRowItems as row, i }}
-                        <div>
+                        <div hidden="{{ displayedListRow !== i }}">
                             {{ #each row as character, j }}
                                 <li role="munuitemradio" aria-selected="{{ current === i * characterRowItems[0].length + j }}">
                                     <a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}">
