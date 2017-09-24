@@ -14,11 +14,13 @@
             {{ #each contents[items[current].id] as content }}
                 <section>
                     <h2><img src="{{ content.heading.src }}" alt="{{ content.heading.alt }}"></h2>
-                    <p>
-                        {{ #each content.texts as text }}
-                            {{ text }}<br>
-                        {{ /each }}
-                    </p>
+                    {{ #if content.texts !== null }}
+                        <p>
+                            {{ #each content.texts as text }}
+                                {{ text }}<br>
+                            {{ /each }}
+                        </p>
+                    {{ /if }}
                     <div class="thumbnail">
                         {{ #each content.images as image }}
                             <img src="{{ image.src }}" alt="{{ image.alt }}">
@@ -68,15 +70,20 @@
     }
 
     h2{
-        margin: 0;
+        margin: 15px 0;
     }
 
     p {
+        margin: 15px 0;
         line-height: 1.7em;
     }
 
+    .thumbnail {
+        margin: 5px 0;
+    }
+
     .thumbnail img {
-        margin: 0 5px;
+        margin: 5px;
     }
 </style>
 
@@ -139,10 +146,26 @@
                 heading: { src: "img/text/system_battle03.png", alt: "死んだら最後の緊張感" },
                 texts: ["キャラクターは戦闘で死んだら最後、物語に登場しなくなります。", "キャラクターの静止でストーリーが変化するかも！？"],
                 images: [
-                    { src: "img/thumbnail/gameover.png", alt: "ゲームオーバー" }, // TODO
+                    { src: "img/thumbnail/gameover.png", alt: "ゲームオーバー" },
                 ]
             }
         ],
+        drama: [
+            {
+                heading: { src: "img/text/system_drama01.png", alt: "世界を彩るキャラクターたちのドラマ" },
+                texts: null,
+                images: [
+                    { src: "img/thumbnail/system_drama01.png", alt: "ストーリーパート1" },
+                    { src: "img/thumbnail/system_drama02.png", alt: "ストーリーパート2" },
+                    { src: "img/thumbnail/system_drama03.png", alt: "ストーリーパート3" },
+                    { src: "img/thumbnail/system_drama04.png", alt: "ストーリーパート4" },
+                    { src: "img/thumbnail/system_drama05.png", alt: "ストーリーパート5" },
+                    { src: "img/thumbnail/system_drama06.png", alt: "ストーリーパート6" },
+                    { src: "img/thumbnail/system_drama07.png", alt: "ストーリーパート7" },
+                    { src: "img/thumbnail/system_drama08.png", alt: "ストーリーパート8" },
+                ]
+            }
+        ]
     });
 
     export default {
