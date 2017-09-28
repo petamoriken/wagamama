@@ -128,18 +128,18 @@
                 heading: { src: "img/text/system_battle01.png", alt: "3隊VS3隊のコマンドバトル" },
                 texts: ["戦闘はシンプルなコマンドバトル！", "「攻撃スキル」と「防御スキル」を使い分けて敵を撃退しよう。", "敵を捕獲してみかたにすることもできるぞ！"],
                 images: [
-                    { src: "", alt: "戦闘画面1" }, // TODO
-                    { src: "", alt: "戦闘画面2" }, // TODO
-                    { src: "", alt: "戦闘画面3" } // TODO
+                    { src: "img/thumbnail/system_battle01.png", alt: "戦闘画面1" }, // TODO
+                    { src: "img/thumbnail/system_battle02.png", alt: "戦闘画面2" }, // TODO
+                    { src: "img/thumbnail/system_battle03.png", alt: "戦闘画面3" } // TODO
                 ]
             },
             {
                 heading: { src: "img/text/system_battle02.png", alt: "さまざまなスキル" },
                 texts: ["キャラクターごとに個性的なスキルが使える！"],
                 images: [
-                    { src: "", alt: "戦闘画面1" }, // TODO
-                    { src: "", alt: "戦闘画面2" }, // TODO
-                    { src: "", alt: "戦闘画面3" } // TODO
+                    { src: "img/thumbnail/system_battle04.png", alt: "戦闘画面1" }, // TODO
+                    { src: "img/thumbnail/system_battle05.png", alt: "戦闘画面2" }, // TODO
+                    { src: "img/thumbnail/system_battle06.png", alt: "戦闘画面3" } // TODO
                 ]
             },
             {
