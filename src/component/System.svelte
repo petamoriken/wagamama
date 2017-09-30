@@ -4,14 +4,15 @@
         <nav>
             <menu type="toolbar">
                 {{ #each items as item, i }}
-                    <li>
+                    <li aria-current="{{ current === i ? 'page' : '' }}">
                         <a on:tap="set({ current: i })" href="#{{ item.id }}"><img src="{{ item.image.src }}" alt={{ item.image.alt }}></a>
                     </li>
                 {{ /each }}
             </menu>
         </nav>
         <hr>
-            {{ #each contents[items[current].id] as content }}
+        <div class="{{ items[current].id }}">
+            {{ #each contents[items[current].id] as content, i }}
                 <section>
                     <h2><img src="{{ content.heading.src }}" alt="{{ content.heading.alt }}"></h2>
                     {{ #if content.texts !== null }}
@@ -23,11 +24,17 @@
                     {{ /if }}
                     <div class="thumbnail">
                         {{ #each content.images as image }}
-                            <img src="{{ image.src }}" alt="{{ image.alt }}">
+                            <div>
+                                <img src="{{ image.src }}" alt="{{ image.alt }}">
+                                {{ #if image.sub }}
+                                    <img class="sub" src="{{ image.sub.src }}" alt="{{ image.sub.alt }}">
+                                {{ /if }}
+                            </div>
                         {{ /each }}
                     </div>
                 </section>
             {{ /each }}
+        </div>
     </div>
 </main>
 
@@ -56,7 +63,9 @@
     }
 
     menu {
-        width: 330px;
+        width: 384px;
+        position: relative;
+        top: 7px;
         display: flex;
         list-style: none;
         margin: 0 auto;
@@ -64,12 +73,17 @@
         justify-content: space-between;
     }
 
+    menu li[aria-current="page"] {
+        position: relative;
+        z-index: 100;
+    }
+
     section {
         margin: 50px 0;
         text-align: center;
     }
 
-    h2{
+    h2 {
         margin: 15px 0;
     }
 
@@ -82,8 +96,50 @@
         margin: 5px 0;
     }
 
+    .thumbnail > div {
+        display: inline;
+        position: relative;
+    }
+
     .thumbnail img {
         margin: 5px;
+    }
+
+    .thumbnail .sub {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    /*
+        battle
+    */
+    .battle > section:nth-of-type(2) .thumbnail {
+        width: 750px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .battle > section:nth-of-type(2) .thumbnail div:nth-of-type(1) {
+        align-self: flex-start;
+    }
+
+    .battle > section:nth-of-type(2) .thumbnail div:nth-of-type(2) {
+        align-self: flex-end;
+        margin-top: -100px;
+    }
+
+    .battle > section:nth-of-type(2) .thumbnail div:nth-of-type(3) {
+        align-self: flex-start;
+        margin-left: 100px;
+        margin-top: -40px;
+    }
+
+    .battle > section:nth-of-type(2) .thumbnail .sub {
+        top: 10px;
+        left: -30px;
     }
 </style>
 
@@ -117,9 +173,9 @@
                 heading: { src: "img/text/system_field03.png", alt: "軍団を強化しよう" },
                 texts: ["メニュー画面から町へ繰り出すことができます。", "町では装備や戦闘の役に立つカードを購入できたり、", "キャラクターたちのショートエピソードを楽しむことが出来ます。"],
                 images: [
-                    { src: "img/thumbnail/system_field06.png", alt: "町へ行く" },
-                    { src: "img/thumbnail/system_field07.png", alt: "" }, // TODO
-                    { src: "img/thumbnail/system_field08.png", alt: "" }, // TODO
+                    { src: "img/thumbnail/system_field06.png", alt: "町へ行く1" },
+                    { src: "img/thumbnail/system_field07.png", alt: "町へ行く2" },
+                    { src: "img/thumbnail/system_field08.png", alt: "町へ行く3" },
                 ]
             }
         ],
@@ -128,23 +184,23 @@
                 heading: { src: "img/text/system_battle01.png", alt: "3隊VS3隊のコマンドバトル" },
                 texts: ["戦闘はシンプルなコマンドバトル！", "「攻撃スキル」と「防御スキル」を使い分けて敵を撃退しよう。", "敵を捕獲してみかたにすることもできるぞ！"],
                 images: [
-                    { src: "img/thumbnail/system_battle01.png", alt: "戦闘画面1" }, // TODO
-                    { src: "img/thumbnail/system_battle02.png", alt: "戦闘画面2" }, // TODO
-                    { src: "img/thumbnail/system_battle03.png", alt: "戦闘画面3" } // TODO
+                    { src: "img/thumbnail/system_battle01.png", alt: "戦闘画面1" },
+                    { src: "img/thumbnail/system_battle02.png", alt: "戦闘画面2" },
+                    { src: "img/thumbnail/system_battle03.png", alt: "戦闘画面3" }
                 ]
             },
             {
                 heading: { src: "img/text/system_battle02.png", alt: "さまざまなスキル" },
                 texts: ["キャラクターごとに個性的なスキルが使える！"],
                 images: [
-                    { src: "img/thumbnail/system_battle04.png", alt: "戦闘画面1" }, // TODO
-                    { src: "img/thumbnail/system_battle05.png", alt: "戦闘画面2" }, // TODO
-                    { src: "img/thumbnail/system_battle06.png", alt: "戦闘画面3" } // TODO
+                    { src: "img/thumbnail/system_battle04.png", alt: "戦闘画面1", sub: { src: "img/text/system_battle_sub01.png", alt: "ターンアンデッド！" } },
+                    { src: "img/thumbnail/system_battle05.png", alt: "戦闘画面2", sub: { src: "img/text/system_battle_sub02.png", alt: "破壊光線！！" }  },
+                    { src: "img/thumbnail/system_battle06.png", alt: "戦闘画面3", sub: { src: "img/text/system_battle_sub03.png", alt: "ゴッドレイ！！！" }  }
                 ]
             },
             {
                 heading: { src: "img/text/system_battle03.png", alt: "死んだら最後の緊張感" },
-                texts: ["キャラクターは戦闘で死んだら最後、物語に登場しなくなります。", "キャラクターの静止でストーリーが変化するかも！？"],
+                texts: ["キャラクターは戦闘で死んだら最後、物語に登場しなくなります。", "キャラクターの生死でストーリーが変化するかも！？"],
                 images: [
                     { src: "img/thumbnail/gameover.png", alt: "ゲームオーバー" },
                 ]
