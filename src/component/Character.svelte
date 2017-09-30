@@ -11,7 +11,7 @@
                     {{ #each characterRowItems as row, i }}
                         <div hidden="{{ displayedListRow !== i }}">
                             {{ #each row as character, j }}
-                                <li role="munuitemradio" aria-selected="{{ current === i * characterRowItems[0].length + j }}">
+                                <li role="menuitemradio" aria-current="{{ current === i * characterRowItems[0].length + j ? 'page' : '' }}">
                                     <a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}">
                                         <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ">
                                     </a>
@@ -122,15 +122,16 @@
     }
 
     li img {
+        opacity: 0.6;
         vertical-align: top;
     }
 
-    li[aria-selected="false"] img {
-        opacity: 0.6;
+    li[aria-current="page"] img {
+        opacity: 1;
     }
 
     @media screen and (min-width: 740px) {
-        li[aria-selected="false"] img:hover {
+        li:not([aria-selected="page"]) img:hover {
             opacity: 1;
         }
     }

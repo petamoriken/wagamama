@@ -51,13 +51,13 @@
     footer > dl > dd {
         display: flex;
         align-items: center;
-        flex-basis: 25%;
+        flex-basis: 23%;
         margin: 6px 0;
         color: #eee;
     }
 
     footer > dl > dd:nth-of-type(2n) {
-        flex-basis: 40%;
+        flex-basis: 42%;
     }
 
     dd > dl {
