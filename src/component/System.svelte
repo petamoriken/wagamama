@@ -165,6 +165,14 @@
     .battle > section:nth-of-type(3) .thumbnail img {
         transform: translateX(195px);
     }
+
+    /*
+        drama
+    */
+    .drama .thumbnail {
+        width: 750px;
+        margin: 0 auto;
+    }
 </style>
 
 <script>
