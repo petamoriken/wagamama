@@ -73,7 +73,7 @@
     }
 
     dd > dl > dd {
-        margin: 0 0.5em;
+        margin: 0 0.5em 0 0;
         display: inline;
     }
 

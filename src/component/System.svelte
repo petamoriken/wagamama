@@ -71,7 +71,7 @@
     menu {
         width: 384px;
         position: relative;
-        top: 7px;
+        top: 8px;
         display: flex;
         list-style: none;
         margin: 0 auto;
@@ -330,26 +330,32 @@
         events: {
             tap(node, callback) {
                 if("ontouchstart" in window) {
-                    const ontouchstart = e => {
+                    const hasPointerEvent = "onpointerdown" in window;
+
+                    const startHandler = hasPointerEvent ? "pointerdown" : "touchstart";
+                    const endHandler = hasPointerEvent ? "pointerup" : "touchend";
+                    const moveHandler = hasPointerEvent ? "pointermove" : "touchmove";
+
+                    const onstart = e => {
                         let isTap = true;
 
-                        const ontouchmove = e => {
+                        const onmove = e => {
                             isTap = false;
                         }
-                        node.addEventListener("touchmove", ontouchmove);
+                        node.addEventListener(moveHandler, onmove);
 
-                        node.addEventListener("touchend", e => {
+                        node.addEventListener(endHandler, e => {
                             if(isTap) {
                                 callback(e);
                             }
-                            node.removeEventListener("touchmove", ontouchmove);
+                            node.removeEventListener(moveHandler, onmove);
                         }, { once: true });
                     }
-                    node.addEventListener("touchstart", ontouchstart);
+                    node.addEventListener(startHandler, onstart);
 
                     return {
                         teardown() {
-                            node.removeEventListener("touchstart", ontouchstart);
+                            node.removeEventListener(startHandler, onstart);
                         }
                     };
                 } else {
