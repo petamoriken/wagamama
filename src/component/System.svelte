@@ -12,7 +12,7 @@
         </nav>
         <hr>
         <div class="gallery {{ items[current].id }}">
-            {{ #each contents[items[current].id] as content, i }}
+            {{ #each contents[items[current].id] as content }}
                 <section>
                     <h2><img src="{{ content.heading.src }}" alt="{{ content.heading.alt }}"></h2>
                     {{ #if content.texts !== null }}
@@ -23,7 +23,7 @@
                         </p>
                     {{ /if }}
                     <div class="thumbnail">
-                        {{ #each content.images as image, j }}
+                        {{ #each content.images as image }}
                             <div>
                                 {{ #if image.href }}
                                     <a href="{{ image.href }}">
@@ -107,71 +107,106 @@
     }
 
     .thumbnail > div {
-        display: inline;
+        display: inline-block;
         position: relative;
     }
 
     .thumbnail img {
-        margin: 5px;
+        margin: 2.5px;
     }
 
     .thumbnail .sub {
         position: absolute;
-        top: 0;
-        left: 0;
         pointer-events: none;
     }
 
-    /*
-        battle
-    */
-    .battle > section:nth-of-type(2) .thumbnail {
-        width: 750px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .battle > section:nth-of-type(2) .thumbnail img {
-        margin: 0;
-    }
-
-    .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(1) {
-        align-self: flex-start;
-    }
-
-    .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(2) {
-        align-self: flex-end;
-        margin-top: -90px;
-    }
-
-    .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(3) {
-        align-self: flex-start;
-        margin-left: 100px;
-        margin-top: -30px;
-    }
-
-    .battle > section:nth-of-type(2) > .thumbnail .sub {
+    .battle .thumbnail .sub {
         top: 10px;
         left: -30px;
     }
 
-    .battle > section:nth-of-type(3) .thumbnail {
-        margin-top: -140px;
-        z-index: -10;
+    .drama .thumbnail .sub {
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
-    .battle > section:nth-of-type(3) .thumbnail img {
-        transform: translateX(195px);
+    @media screen and (min-width: 740px) {
+        .battle > section:nth-of-type(2) .thumbnail {
+            width: 750px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .battle > section:nth-of-type(2) .thumbnail img {
+            margin: 0;
+        }
+
+        .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(1) {
+            align-self: flex-start;
+        }
+
+        .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(2) {
+            align-self: flex-end;
+            margin-top: -90px;
+        }
+
+        .battle > section:nth-of-type(2) > .thumbnail div:nth-of-type(3) {
+            align-self: flex-start;
+            margin-left: 100px;
+            margin-top: -30px;
+        }
+
+        .battle > section:nth-of-type(3) .thumbnail {
+            margin-top: -140px;
+            z-index: -10;
+        }
+
+        .battle > section:nth-of-type(3) .thumbnail img {
+            transform: translateX(195px);
+        }
+
+        .drama .thumbnail {
+            width: 750px;
+            margin: 0 auto;
+        }
     }
 
-    /*
-        drama
-    */
-    .drama .thumbnail {
-        width: 750px;
-        margin: 0 auto;
+    @media screen and (max-width: 740px) {
+        .wrapper {
+            width: 100%;
+        }
+
+        h1 {
+            display: none;
+        }
+
+        menu {
+            max-width: 100%;
+            justify-content: space-around;
+        }
+
+        menu li {
+            max-width: 30%;
+        }
+
+        menu img {
+             max-width: 100%;
+        }
+
+        h2 img {
+            max-width: 100%;
+        }
+
+        section p {
+            padding: 0 10px;
+        }
+
+        .thumbnail img {
+            max-width: 90%;
+        }
     }
 </style>
 
@@ -243,14 +278,14 @@
                 heading: { src: "img/text/system_drama01.png", alt: "世界を彩るキャラクターたちのドラマ" },
                 texts: null,
                 images: [
-                    { href: "img/system/drama01.png", src: "img/thumbnail/system_drama01.png", alt: "ストーリーパート1" },
+                    { href: "img/system/drama01.png", src: "img/thumbnail/system_drama01.png", alt: "ストーリーパート1", sub: { src: "img/text/system_drama_sub01.png", alt: "" } },
                     { href: "img/system/drama02.png", src: "img/thumbnail/system_drama02.png", alt: "ストーリーパート2" },
                     { href: "img/system/drama03.png", src: "img/thumbnail/system_drama03.png", alt: "ストーリーパート3" },
-                    { href: "img/system/drama04.png", src: "img/thumbnail/system_drama04.png", alt: "ストーリーパート4" },
-                    { href: "img/system/drama05.png", src: "img/thumbnail/system_drama05.png", alt: "ストーリーパート5" },
+                    { href: "img/system/drama04.png", src: "img/thumbnail/system_drama04.png", alt: "ストーリーパート4", sub: { src: "img/text/system_drama_sub02.png", alt: "" } },
+                    { href: "img/system/drama05.png", src: "img/thumbnail/system_drama05.png", alt: "ストーリーパート5", sub: { src: "img/text/system_drama_sub03.png", alt: "" } },
                     { href: "img/system/drama06.png", src: "img/thumbnail/system_drama06.png", alt: "ストーリーパート6" },
                     { href: "img/system/drama07.png", src: "img/thumbnail/system_drama07.png", alt: "ストーリーパート7" },
-                    { href: "img/system/drama08.png", src: "img/thumbnail/system_drama08.png", alt: "ストーリーパート8" },
+                    { href: "img/system/drama08.png", src: "img/thumbnail/system_drama08.png", alt: "ストーリーパート8", sub: { src: "img/text/system_drama_sub04.png", alt: "" } },
                 ]
             }
         ]
