@@ -21,7 +21,10 @@
     header {
         width: 100%;
         position: absolute;
-        background: url("img/background/header.png") repeat-x 0 calc(100% - 10px);
+        background:
+            url("img/background/header.png") 0 100% repeat-x,
+            url("img/background/header_loop.png") 0 calc(100% - 147px) repeat-x,
+            url("img/background/header_loop.png") 0 calc(100% - 294px) repeat-x;
         z-index: 1000;
     }
 
@@ -74,7 +77,6 @@
 
     @media screen and (max-width: 740px) {
         .open {
-            background-position-y: bottom;
             padding-bottom: 20px;
         }
 
