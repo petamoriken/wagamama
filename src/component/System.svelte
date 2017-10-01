@@ -5,7 +5,7 @@
             <menu type="toolbar">
                 {{ #each items as item, i }}
                     <li aria-current="{{ current === i ? 'page' : '' }}">
-                        <a on:tap="set({ current: i })" href="#{{ item.id }}"><img src="{{ item.image.src }}" alt={{ item.image.alt }}></a>
+                        <a href="#{{ item.id }}"><img src="{{ item.image.src }}" alt={{ item.image.alt }}></a>
                     </li>
                 {{ /each }}
             </menu>
@@ -307,17 +307,25 @@
                     captions: false,
                     async: true
                 });
+            },
+
+            updateCurrentByLocationHash() {
+                const hash = location.hash;
+                const index = hash ? items.findIndex(item => `#${ item.id }` === hash) : 0;
+                if(index !== -1) {
+                    this.set({
+                        current: index
+                    });
+                }
             }
         },
 
         oncreate() {
-            // location.href で初期値の設定
-            const index = items.findIndex(item => `#${ item.id }` === location.hash);
-            if(index !== -1) {
-                this.set({
-                    current: index
-                });
-            }
+            // location で初期値の設定
+            this.updateCurrentByLocationHash();
+
+            // popstate イベントの監視
+            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
 
             // モーダルの登録
             baguetteBox.run(".gallery", {
@@ -325,50 +333,6 @@
                 async: true
             });
             this.observe("current", this.updateGallery, { init: false, defer: true });
-        },
-
-        events: {
-            tap(node, callback) {
-                if("ontouchstart" in window) {
-                    const hasPointerEvent = "onpointerdown" in window;
-
-                    const startHandler = hasPointerEvent ? "pointerdown" : "touchstart";
-                    const endHandler = hasPointerEvent ? "pointerup" : "touchend";
-                    const moveHandler = hasPointerEvent ? "pointermove" : "touchmove";
-
-                    const onstart = e => {
-                        let isTap = true;
-
-                        const onmove = e => {
-                            isTap = false;
-                        }
-                        node.addEventListener(moveHandler, onmove);
-
-                        node.addEventListener(endHandler, e => {
-                            if(isTap) {
-                                callback(e);
-                            }
-                            node.removeEventListener(moveHandler, onmove);
-                        }, { once: true });
-                    }
-                    node.addEventListener(startHandler, onstart);
-
-                    return {
-                        teardown() {
-                            node.removeEventListener(startHandler, onstart);
-                        }
-                    };
-                } else {
-                    const onclick = e => callback(e);
-                    node.addEventListener("click", onclick);
-
-                    return {
-                        teardown() {
-                            node.removeEventListener("click", onclick);
-                        }
-                    };
-                }
-            }
         }
     };
 </script>

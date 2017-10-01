@@ -12,7 +12,7 @@
                         <div hidden="{{ displayedListRow !== i }}">
                             {{ #each row as character, j }}
                                 <li role="menuitemradio" aria-current="{{ current === i * characterRowItems[0].length + j ? 'page' : '' }}">
-                                    <a on:tap="set({ current: i * characterRowItems[0].length + j })" href="#{{ character.id }}">
+                                    <a href="#{{ character.id }}">
                                         <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ">
                                     </a>
                                 </li>
@@ -329,6 +329,16 @@
                         this.refs.style.textContent = "";
                     }
                 }
+            },
+
+            updateCurrentByLocationHash() {
+                const hash = location.hash;
+                const index = hash ? characters.findIndex(children => `#${ children.id }` === hash) : 0;
+                if(index !== -1) {
+                    this.set({
+                        current: index
+                    });
+                }
             }
         },
 
@@ -339,13 +349,11 @@
             // menu の表示領域を確認して、displayedMaxListItem を変更したり style を変える
             this.refreshDisplayedListItem();
 
-            // location.href で初期値の設定
-            const index = characters.findIndex(children => `#${ children.id }` === location.hash);
-            if(index !== -1) {
-                this.set({
-                    current: index
-                });
-            }
+            // location で初期値の設定
+            this.updateCurrentByLocationHash();
+
+            // popstate イベントの監視
+            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
 
             // menu のリサイズを監視して refreshDisplayedListItem を呼ぶ
             const element = this.refs.menu;
