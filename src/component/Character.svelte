@@ -211,16 +211,15 @@
         }
 
         figure {
+            display: block;
             top: auto;
             margin: 20px 0 0;
-            flex-direction: column;
-            align-items: center;
+            min-height: 550px;
         }
 
         figcaption {
-            align-self: center;
             max-width: 80%;
-            margin-top: 0;
+            margin: 0 auto;
             transform: none;
         }
 
