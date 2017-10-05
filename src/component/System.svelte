@@ -226,7 +226,7 @@
     const contents = Object.freeze({
         field: [
             {
-                heading: { src: "img/text/system_field01.png", srcset: "img/text/system_field01@2x.png 2x 2x", alt: "広大な世界を蹂躙せよ" },
+                heading: { src: "img/text/system_field01.png", srcset: "img/text/system_field01@2x.png 2x", alt: "広大な世界を蹂躙せよ" },
                 texts: ["104の領地からなる広大な世界を侵略していくのがこのゲームの目的です。", "兵数をふやしたり、装備を買ったりしてユニットを鍛え、圧倒的な力で敵を侵略しよう。"],
                 images: [
                     { href: "img/system/field01.png", src: "img/thumbnail/system_field01.png", srcset: "img/thumbnail/system_field01@2x.png 2x", alt: "マップ画面1" },
