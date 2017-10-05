@@ -62,12 +62,12 @@
         left: 0;
         margin: 0;
         border: 0;
-        background: url("img/accessory/border.png");
+        background: url("img/background/border.png");
     }
 
     @media screen and (min-resolution: 2dppx) {
         .wrapper > hr {
-            background: url("img/accessory/border@2x.png") 0/contain;
+            background: url("img/background/border@2x.png") 0/contain;
         }
     }
 
@@ -188,12 +188,12 @@
         padding: 40px 40px 25px;
         color: black;
         box-sizing: border-box;
-        background: url("img/accessory/comment.png");
+        background: url("img/background/comment.png");
     }
 
     @media screen and (min-resolution: 2dppx) {
         .description {
-            background: url("img/accessory/comment@2x.png") 0/cover;
+            background: url("img/background/comment@2x.png") 0/cover;
         }
     }
 
