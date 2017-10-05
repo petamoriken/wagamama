@@ -137,6 +137,7 @@
         transform: translateX(-50%);
     }
 
+    /* for PC */
     @media screen and (min-width: 740px) {
         .battle > section:nth-of-type(2) .thumbnail {
             width: 750px;
@@ -180,6 +181,7 @@
         }
     }
 
+    /* for Phone */
     @media screen and (max-width: 740px) {
         .wrapper {
             width: 100%;
@@ -212,6 +214,11 @@
 
         .thumbnail img {
             max-width: 90%;
+        }
+
+        .battle .thumbnail .sub {
+            top: 10px;
+            left: 0;
         }
     }
 </style>
