@@ -55,7 +55,7 @@ h1 {
 
 #subheading p {
     width: 350px;
-    color: white;
+    color: #eee;
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.7);
     line-height: 1.5em;

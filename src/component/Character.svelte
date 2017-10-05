@@ -42,7 +42,7 @@
 <style>
     main {
         width: 100%;
-        color: white;
+        color: #eee;
     }
 
     .wrapper {
@@ -186,7 +186,7 @@
         width: 360px;
         height: 244px;
         padding: 40px 40px 25px;
-        color: black;
+        color: #111;
         box-sizing: border-box;
         background: url("img/background/comment.png");
     }

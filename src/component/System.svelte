@@ -49,7 +49,7 @@
         width: 1100px;
         margin: 0 auto;
         padding: 60px 0 0;
-        color: white;
+        color: #eee;
     }
 
     h1 {
