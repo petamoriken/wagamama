@@ -3,6 +3,7 @@ const fs = require("fs");
 
 const gulp = require("gulp");
 const $ = require("gulp-load-plugins")();
+const pngquant = require("imagemin-pngquant");
 
 const svelte = require("svelte");
 
@@ -13,15 +14,30 @@ const autoprefixer = require("autoprefixer");
 const isDebug = process.env.NODE_ENV !== "release";
 const output = "build/" + (isDebug ? "debug" : "release");
 
+gulp.task("static", () => {
+    if(isDebug) {
+        return gulp.src(["src/**", "!src/component/**"], { since: gulp.lastRun("static") })
+            .pipe(gulp.dest(output));
+    }
 
-gulp.task("static", () => gulp.src(["src/**", "!src/component/**"], { since: gulp.lastRun("static") })
-    .pipe(gulp.dest(output))
-);
+    return Promise.all([
+        new Promise(resolve => gulp.src(["src/**", "!src/component/**", "!src/**/*.png"], { since: gulp.lastRun("static") })
+            .pipe(gulp.dest(output))
+            .on("end", resolve)
+        ),
+        new Promise(resolve => gulp.src("src/**/*.png", { since: gulp.lastRun("static") })
+            .pipe($.imagemin(
+                [pngquant({quality: "40-70", speed: 1})]
+            )).pipe(gulp.dest(output))
+            .on("end", resolve)
+        )
+    ]);
+});
 
 gulp.task("component", () => {
     let css = "";
 
-    return gulp.src("src/component/**", { since: gulp.lastRun("component") })
+    return new Promise(resolve => gulp.src("src/component/**", { since: gulp.lastRun("component") })
         .pipe($.plumber())
         .pipe($.each((content, file, cb) => {
             const { name, base, dir } = path.parse(file.path);
@@ -46,6 +62,7 @@ gulp.task("component", () => {
 
             if(isDebug) {
                 fs.writeFileSync(outputPath, "");
+                resolve()
                 return;
             }
             postcss([
@@ -56,8 +73,10 @@ gulp.task("component", () => {
                 to: "component/style.css"
             }).then(result => {
                 fs.writeFileSync(outputPath, result);
+                resolve();
             });
-        });
+        })
+    );
 });
 
 gulp.task("watch", () => {
