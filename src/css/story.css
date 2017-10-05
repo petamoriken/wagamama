@@ -11,6 +11,12 @@ html, body {
     background: url("../img/background/alice.png") center/cover;
 }
 
+@media screen and (min-resolution: 2dppx) {
+    #heading {
+        background: url("../img/background/alice@2x.png") center/cover;
+    }
+}
+
 h1 {
     position: absolute;
     text-align: center;
@@ -21,6 +27,12 @@ h1 {
 #subheading {
     width: 100%;
     background: url("../img/background/world.png") center/cover;
+}
+
+@media screen and (min-resolution: 2dppx) {
+    #subheading {
+        background: url("../img/background/world@2x.png") center/cover;
+    }
 }
 
 #subheading > .wrapper {

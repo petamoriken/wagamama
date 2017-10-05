@@ -70,7 +70,7 @@
 
     @media screen and (min-resolution: 2dppx) {
         hr {
-            background: url("img/accessory/border@2x.png") 0/100% 100%;
+            background: url("img/accessory/border@2x.png") 0/contain;
         }
     }
 

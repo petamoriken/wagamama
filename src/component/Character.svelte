@@ -1,11 +1,11 @@
 <main>
     <style ref:style></style>
     <div class="wrapper">
-        <h1><img src="img/heading/character.png" alt="キャラクター"></h1>
+        <h1><img src="img/heading/character.png" srcset="img/heading/character@2x.png 2x" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" alt="左へ移動"></button>
-            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" alt="右へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
                 <div on:swipe>
                     {{ #each characterRowItems as row, i }}
@@ -13,7 +13,7 @@
                             {{ #each row as character, j }}
                                 <li role="menuitemradio" aria-current="{{ current === i * characterRowItems[0].length + j ? 'page' : '' }}">
                                     <a href="#{{ character.id }}">
-                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ">
+                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" srcset="img/character/chip/{{ character.id }}@2x.png 2x" alt="{{ character.name.ja }} キャラチップ">
                                     </a>
                                 </li>
                             {{ /each }}
@@ -24,7 +24,7 @@
         </nav>
         <figure>
             <figcaption>
-                <h2><img src="img/character/name/{{ characters[current].id }}.png" alt="{{ characters[current].name.ja }}"></h2>
+                <h2><img src="img/character/name/{{ characters[current].id }}.png" srcset="img/character/name/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }}"></h2>
                 <hr>
                 <div class="subtext">
                     <p>cv.{{ characters[current].cv }}</p>
@@ -34,7 +34,7 @@
                     <p>{{ characters[current].description }}</p>
                 </div>
             </figcaption>
-            <img src="img/character/{{ characters[current].id }}.png" alt="{{ characters[current].name.ja }} 立ち絵">
+            <img src="img/character/{{ characters[current].id }}.png" srcset="img/character/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }} 立ち絵">
         </figure>
     </div>
 </main>
@@ -63,6 +63,12 @@
         margin: 0;
         border: 0;
         background: url("img/accessory/border.png");
+    }
+
+    @media screen and (min-resolution: 2dppx) {
+        .wrapper > hr {
+            background: url("img/accessory/border@2x.png") 0/contain;
+        }
     }
 
     nav {
@@ -183,6 +189,12 @@
         color: black;
         box-sizing: border-box;
         background: url("img/accessory/comment.png");
+    }
+
+    @media screen and (min-resolution: 2dppx) {
+        .description {
+            background: url("img/accessory/comment@2x.png") 0/cover;
+        }
     }
 
     .description > p {
