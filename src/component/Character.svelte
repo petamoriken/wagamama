@@ -396,9 +396,9 @@
                         node.addEventListener("touchend", e => {
                             const dx = e.changedTouches[0].clientX - x;
                             if(dx < -swipeThreshold) {
-                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
-                            } else if(dx > swipeThreshold) {
                                 this.set({ displayedListRow: this.get("displayedListRow") + 1 });
+                            } else if(dx > swipeThreshold) {
+                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
                             }
                         }, { once: true });
                     }

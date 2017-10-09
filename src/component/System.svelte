@@ -54,7 +54,7 @@
 
     h1 {
         position: absolute;
-        transform: translateY(15px);
+        transform: translateY(24px);
         margin: 0 0 0 20px;
     }
 
@@ -243,7 +243,7 @@
             },
             {
                 heading: { src: "img/text/system_field02.png", srcset: "img/text/system_field02@2x.png 2x", alt: "軍団を強化しよう" },
-                texts: ["敵の領地を新訳するために自分の軍団を強くする必要があります。", "経験値をためてレベルを上げたり、兵士の数を増やしたり、", "装備を変えたりとユニットをカスタマイズして軍団を強くしよう。"],
+                texts: ["敵の領地を侵略するために自分の軍団を強くする必要があります。", "経験値をためてレベルを上げたり、兵士の数を増やしたり、", "装備を変えたりとユニットをカスタマイズして軍団を強くしよう。"],
                 images: [
                     { href: "img/system/field04.png", src: "img/thumbnail/system_field04.png", srcset: "img/thumbnail/system_field04@2x.png 2x", alt: "軍団拡張画面1" },
                     { href: "img/system/field05.png", src: "img/thumbnail/system_field05.png", srcset: "img/thumbnail/system_field05@2x.png 2x", alt: "軍団拡張画面2" },

@@ -8,12 +8,12 @@ html, body {
     position: relative;
     width: 100%;
     height: 400px;
-    background: url("../img/background/alice.png") center/cover;
+    background: url("../img/background/alice.png") center 0/cover;
 }
 
 @media screen and (min-resolution: 2dppx) {
     #heading {
-        background: url("../img/background/alice@2x.png") center/cover;
+        background: url("../img/background/alice@2x.png") center 0/cover;
     }
 }
 
