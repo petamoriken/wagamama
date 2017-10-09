@@ -67,7 +67,7 @@
 
     @media screen and (min-resolution: 2dppx) {
         .wrapper > hr {
-            background: url("img/background/border@2x.png") 0/contain;
+            background: url("img/background/border@2x.png") 0/auto 100%;
         }
     }
 
