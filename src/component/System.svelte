@@ -208,8 +208,13 @@
             max-width: 100%;
         }
 
-        section p {
+        p {
+            text-align: justify;
             padding: 0 10px;
+        }
+
+        p br {
+            display: none;
         }
 
         .thumbnail img {
