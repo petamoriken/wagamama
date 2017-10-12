@@ -328,7 +328,7 @@
                     outerDivide.style.width = `${ 100 * rowNum }%`;
 
                     // menu > div > div の width を合わせる
-                    for(const div of outerDivide.children) {
+                    for(const div of outerDivide.childNodes) {
                         div.style.width = `calc(100% / ${ rowNum })`;
                     }
 
@@ -344,7 +344,7 @@
 
             updateCurrentByLocationHash() {
                 const hash = location.hash;
-                const index = hash ? characters.findIndex(children => `#${ children.id }` === hash) : 0;
+                const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
                 if(index !== -1) {
                     this.set({
                         current: index
