@@ -7,7 +7,7 @@
             <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
             <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
-                <div on:swipe>
+                <div ref:outer on:swipe>
                     {{ #each characterRowItems as row, i }}
                         <div hidden="{{ displayedListRow !== i }}">
                             {{ #each row as character, j }}
@@ -298,7 +298,7 @@
 
         methods: {
             displayedListRowSubsciber(displayedListRow) {
-                const element = this.refs.menu;
+                const menu = this.refs.menu;
                 const length = this.get("characterRowItems").length;
 
                 displayedListRow %= length;
@@ -307,13 +307,13 @@
                 }
 
                 requestAfterAnimationFrame(() => {
-                    element.scrollLeft = element.offsetWidth * displayedListRow;
+                    outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow })`;
                 });
             },
 
             refreshDisplayedListItem() {
-                const element = this.refs.menu;
-                const width = element.offsetWidth;
+                const { menu, outer } = this.refs;
+                const width = menu.offsetWidth;
 
                 const displayedMaxListItem = width / imageWidth | 0;
 
@@ -324,11 +324,10 @@
                     const rowNum = characterRowItems.length;
 
                     // menu > div の width を合わせる
-                    const outerDivide = element.firstElementChild;
-                    outerDivide.style.width = `${ 100 * rowNum }%`;
+                    outer.style.width = `${ 100 * rowNum }%`;
 
                     // menu > div > div の width を合わせる
-                    for(const div of outerDivide.childNodes) {
+                    for(const div of outer.childNodes) {
                         div.style.width = `calc(100% / ${ rowNum })`;
                     }
 
@@ -364,19 +363,20 @@
             this.updateCurrentByLocationHash();
 
             // popstate イベントの監視
-            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
+            this.popstateHandler = () => this.updateCurrentByLocationHash();
+            window.addEventListener("popstate", this.popstateHandler);
 
             // menu のリサイズを監視して refreshDisplayedListItem を呼ぶ
-            const element = this.refs.menu;
-            let oldWidth = element.offsetWidth;
+            const { menu, outer } = this.refs;
+            let oldWidth = menu.offsetWidth;
             const resizeHandler = this.resizeHandler = () => {
-                const currentWidth = element.offsetWidth;
+                const currentWidth = menu.offsetWidth;
                 if(currentWidth === oldWidth) {
                     return;
                 }
 
                 this.refreshDisplayedListItem();
-                element.scrollLeft = element.offsetWidth * this.get("displayedListRow");
+                outer.style.transform = `translateX(${ - menu.offsetWidth * this.get("displayedListRow") })`;
 
                 oldWidth = currentWidth;
             }
@@ -385,6 +385,7 @@
 
         ondestroy() {
             window.removeEventListener("resize", this.resizeHandler);
+            window.removeEventListener("popstate", this.popstateHandler);
         },
 
         events: {
