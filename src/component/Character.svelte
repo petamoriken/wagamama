@@ -269,12 +269,6 @@
         { id: "seedle", name: { ja: "シードル", en: "Seedle" }, cv: "ばすにゃん", description: "エリの部下で硬い殻に覆われたシードラウトという種族の植物人。エリによくいびられているが、本人は幸せそう。" }
     ]);
 
-    function requestAfterAnimationFrame(callback) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(callback);
-        });
-    }
-
     export default {
         data() {
             return {
@@ -306,9 +300,7 @@
                     displayedListRow += length;
                 }
 
-                requestAfterAnimationFrame(() => {
-                    outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow }px)`;
-                });
+                outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow }px)`;
             },
 
             refreshDisplayedListItem() {
