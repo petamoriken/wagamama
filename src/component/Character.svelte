@@ -298,7 +298,7 @@
 
         methods: {
             displayedListRowSubsciber(displayedListRow) {
-                const menu = this.refs.menu;
+                const { menu, outer } = this.refs;
                 const length = this.get("characterRowItems").length;
 
                 displayedListRow %= length;
@@ -307,7 +307,7 @@
                 }
 
                 requestAfterAnimationFrame(() => {
-                    outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow })`;
+                    outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow }px)`;
                 });
             },
 
@@ -376,7 +376,7 @@
                 }
 
                 this.refreshDisplayedListItem();
-                outer.style.transform = `translateX(${ - menu.offsetWidth * this.get("displayedListRow") })`;
+                outer.style.transform = `translateX(${ - menu.offsetWidth * this.get("displayedListRow") }px)`;
 
                 oldWidth = currentWidth;
             }
