@@ -8,6 +8,7 @@
     "release": "NODE_ENV=release gulp",
     "build": "gulp",
     "build:static": "gulp static",
+    "build:asset": "gulp asset",
     "build:component": "gulp component",
     "watch": "gulp watch",
     "deploy": "NODE_ENV=release gulp deploy",

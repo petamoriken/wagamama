@@ -20,22 +20,26 @@ const output = "build/" + (isDebug ? "debug" : "release");
 
 gulp.task("static", () => {
     if(isDebug) {
-        return gulp.src(["src/**", "!src/component/**"], { since: gulp.lastRun("static") })
+        return gulp.src(["src/**", "!src/component/**", "!src/**/*.png"], { since: gulp.lastRun("static") })
             .pipe(gulp.dest(output));
     }
 
-    return Promise.all([
-        new Promise(resolve => gulp.src(["src/**", "!src/component/**", "!src/**/*.png"], { since: gulp.lastRun("static") })
-            .pipe(gulp.dest(output))
-            .on("end", resolve)
-        ),
-        new Promise(resolve => gulp.src("src/**/*.png", { since: gulp.lastRun("static") })
-            .pipe($.imagemin(
-                [pngquant({quality: "40-70", speed: 1})]
-            )).pipe(gulp.dest(output))
-            .on("end", resolve)
-        )
-    ]);
+    return new Promise(resolve => gulp.src(["src/**", "!src/component/**", "!src/**/*.png"], { since: gulp.lastRun("static") })
+        .pipe(gulp.dest(output))
+        .on("end", resolve)
+    );
+});
+
+gulp.task("asset", () => {
+    if(isDebug) {
+        return gulp.src(["src/**/*.png"], { since: gulp.lastRun("static") })
+            .pipe(gulp.dest(output));
+    }
+
+    return gulp.src("src/**/*.png", { since: gulp.lastRun("static") })
+        .pipe($.imagemin(
+            [pngquant({quality: "40-70", speed: 1})]
+        )).pipe(gulp.dest(output));
 });
 
 gulp.task("component", () => {
@@ -88,7 +92,7 @@ gulp.task("watch", () => {
     gulp.watch("src/component/**", gulp.series("component"));
 });
 
-gulp.task("default", gulp.parallel("static", "component"));
+gulp.task("default", gulp.parallel("static", "asset", "component"));
 
 
 gulp.task("deploy", async () => {
