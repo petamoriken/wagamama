@@ -17,6 +17,7 @@ const Client = require("ftp");
 
 const isDebug = process.env.NODE_ENV !== "release";
 const output = "build/" + (isDebug ? "debug" : "release");
+const connection = 4;
 
 gulp.task("static", () => {
     if(isDebug) {
@@ -138,10 +139,29 @@ gulp.task("deploy", async () => {
             client.mkdir(dirname.replace(output + "/", ""), true, error => error ? reject(error) : resolve());
         });
     }));
-    await Promise.all(filelist.map(filename => {
-        return new Promise((resolve, reject) => {
-            client.put(filename, filename.replace(output + "/", ""), error => error ? reject(error) : resolve());
-        });
-    }));
+
+    await new Promise(resolve => {
+        const fileCount = filelist.length;
+
+        let count = 0;
+        let resolveCount = 0;
+        for(let i = 0; i < connection; ++i) {
+            (async function next() {
+                const filename = filelist[count++];
+                if(!filename) {
+                    if(resolveCount === fileCount) {
+                        resolve();
+                    }
+                    return;
+                }
+
+                await new Promise((resolve, reject) => {
+                    client.put(filename, filename.replace(output + "/", ""), error => error ? reject(error) : resolve());
+                });
+                ++resolveCount;
+                next();
+            })();
+        }
+    });
     client.end();
 });
