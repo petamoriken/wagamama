@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - node
+
+dist: trusty
+sudo: false
+cache: yarn
+
+branches:
+  only:
+  - master
+
+script:
+  - yarn run release
+  - yarn run deploy
