@@ -41,11 +41,10 @@ section {
 
 section h2 {
     text-align: center;
-    margin: 10px 0;
 }
 
-section h2 a, section h2 a:visited {
-    color: white;
+section p {
+    text-align: center;
 }
 
 section h3 {
