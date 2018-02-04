@@ -1,4 +1,5 @@
 html, body {
+    font-family: "Shin Go Medium", "Hiragino Sans", "Meiryo", sans-serif;
     position: relative;
     min-width: 1100px;
     background: #111;
@@ -8,7 +9,7 @@ main > .wrapper {
     width: 1100px;
     margin: 0 auto;
     padding: 60px 0 0;
-    color: white;
+    color: #eee;
 }
 
 main h1 {
@@ -22,7 +23,13 @@ main hr {
     left: 0;
     margin: 0;
     border: 0;
-    background: url("../img/accessory/border.png");
+    background: url("../img/background/border.png");
+}
+
+@media screen and (min-resolution: 2dppx) {
+    main hr {
+        background: url("../img/background/border@2x.png") 0/auto 100%;
+    }
 }
 
 section {

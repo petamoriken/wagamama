@@ -1,11 +1,11 @@
 <main>
     <div class="wrapper">
-        <h1><img src="img/heading/system.png" alt="ゲームシステム"></h1>
+        <h1><img src="img/heading/system.png" srcset="img/heading/system@2x.png 2x" alt="ゲームシステム"></h1>
         <nav>
             <menu type="toolbar">
                 {{ #each items as item, i }}
                     <li aria-current="{{ current === i ? 'page' : '' }}">
-                        <a href="#{{ item.id }}"><img src="{{ item.image.src }}" alt={{ item.image.alt }}></a>
+                        <a href="#{{ item.id }}"><img src="{{ item.image.src }}" srcset="{{ item.image.srcset }}" alt={{ item.image.alt }}></a>
                     </li>
                 {{ /each }}
             </menu>
@@ -14,7 +14,7 @@
         <div class="gallery {{ items[current].id }}">
             {{ #each contents[items[current].id] as content }}
                 <section>
-                    <h2><img src="{{ content.heading.src }}" alt="{{ content.heading.alt }}"></h2>
+                    <h2><img src="{{ content.heading.src }}" srcset="{{ content.heading.srcset}}" alt="{{ content.heading.alt }}"></h2>
                     {{ #if content.texts !== null }}
                         <p>
                             {{ #each content.texts as text }}
@@ -27,13 +27,13 @@
                             <div>
                                 {{ #if image.href }}
                                     <a href="{{ image.href }}">
-                                        <img src="{{ image.src }}" alt="{{ image.alt }}">
+                                        <img src="{{ image.src }}" srcset="{{ image.srcset }}" alt="{{ image.alt }}">
                                     </a>
                                 {{ else }}
-                                    <img src="{{ image.src }}" alt="{{ image.alt }}">
+                                    <img src="{{ image.src }}" srcset="{{ image.srcset }}" alt="{{ image.alt }}">
                                 {{ /if }}
                                 {{ #if image.sub }}
-                                    <img class="sub" src="{{ image.sub.src }}" alt="{{ image.sub.alt }}">
+                                    <img class="sub" src="{{ image.sub.src }}" srcset="{{ image.sub.srcset }}" alt="{{ image.sub.alt }}">
                                 {{ /if }}
                             </div>
                         {{ /each }}
@@ -49,12 +49,12 @@
         width: 1100px;
         margin: 0 auto;
         padding: 60px 0 0;
-        color: white;
+        color: #eee;
     }
 
     h1 {
         position: absolute;
-        transform: translateY(15px);
+        transform: translateY(24px);
         margin: 0 0 0 20px;
     }
 
@@ -65,7 +65,13 @@
         left: 0;
         margin: 0;
         border: 0;
-        background: url("img/accessory/border.png");
+        background: url("img/background/border.png");
+    }
+
+    @media screen and (min-resolution: 2dppx) {
+        hr {
+            background: url("img/background/border@2x.png") 0/auto 100%;
+        }
     }
 
     menu {
@@ -131,6 +137,7 @@
         transform: translateX(-50%);
     }
 
+    /* for PC */
     @media screen and (min-width: 740px) {
         .battle > section:nth-of-type(2) .thumbnail {
             width: 750px;
@@ -174,6 +181,7 @@
         }
     }
 
+    /* for Phone */
     @media screen and (max-width: 740px) {
         .wrapper {
             width: 100%;
@@ -200,92 +208,102 @@
             max-width: 100%;
         }
 
-        section p {
+        p {
+            text-align: justify;
             padding: 0 10px;
+        }
+
+        p br {
+            display: none;
         }
 
         .thumbnail img {
             max-width: 90%;
+        }
+
+        .battle .thumbnail .sub {
+            top: 10px;
+            left: 0;
         }
     }
 </style>
 
 <script>
     const items = Object.freeze([
-        { id: "field", image: { src: "img/button/field.png", alt: "フィールド" } },
-        { id: "battle", image: { src: "img/button/battle.png", alt: "バトル" } },
-        { id: "drama", image: { src: "img/button/drama.png", alt: "ドラマシーン" } }
+        { id: "field", image: { src: "img/button/field.png", srcset: "img/button/field@2x.png 2x", alt: "フィールド" } },
+        { id: "battle", image: { src: "img/button/battle.png", srcset: "img/button/battle@2x.png 2x", alt: "バトル" } },
+        { id: "drama", image: { src: "img/button/drama.png", srcset: "img/button/drama@2x.png 2x", alt: "ドラマシーン" } }
     ]);
 
     const contents = Object.freeze({
         field: [
             {
-                heading: { src: "img/text/system_field01.png", alt: "広大な世界を蹂躙せよ" },
+                heading: { src: "img/text/system_field01.png", srcset: "img/text/system_field01@2x.png 2x", alt: "広大な世界を蹂躙せよ" },
                 texts: ["104の領地からなる広大な世界を侵略していくのがこのゲームの目的です。", "兵数をふやしたり、装備を買ったりしてユニットを鍛え、圧倒的な力で敵を侵略しよう。"],
                 images: [
-                    { href: "img/system/field01.png", src: "img/thumbnail/system_field01.png", alt: "マップ画面1" },
-                    { href: "img/system/field02.png", src: "img/thumbnail/system_field02.png", alt: "マップ画面2" },
-                    { href: "img/system/field03.png", src: "img/thumbnail/system_field03.png", alt: "マップ画面3" }
+                    { href: "img/system/field01.png", src: "img/thumbnail/system_field01.png", srcset: "img/thumbnail/system_field01@2x.png 2x", alt: "マップ画面1" },
+                    { href: "img/system/field02.png", src: "img/thumbnail/system_field02.png", srcset: "img/thumbnail/system_field02@2x.png 2x", alt: "マップ画面2" },
+                    { href: "img/system/field03.png", src: "img/thumbnail/system_field03.png", srcset: "img/thumbnail/system_field03@2x.png 2x", alt: "マップ画面3" }
                 ]
             },
             {
-                heading: { src: "img/text/system_field02.png", alt: "軍団を強化しよう" },
-                texts: ["敵の領地を新訳するために自分の軍団を強くする必要があります。", "経験値をためてレベルを上げたり、兵士の数を増やしたり、", "装備を変えたりとユニットをカスタマイズして軍団を強くしよう。"],
+                heading: { src: "img/text/system_field02.png", srcset: "img/text/system_field02@2x.png 2x", alt: "軍団を強化しよう" },
+                texts: ["敵の領地を侵略するために自分の軍団を強くする必要があります。", "経験値をためてレベルを上げたり、兵士の数を増やしたり、", "装備を変えたりとユニットをカスタマイズして軍団を強くしよう。"],
                 images: [
-                    { href: "img/system/field04.png", src: "img/thumbnail/system_field04.png", alt: "軍団拡張画面1" },
-                    { href: "img/system/field05.png", src: "img/thumbnail/system_field05.png", alt: "軍団拡張画面2" },
+                    { href: "img/system/field04.png", src: "img/thumbnail/system_field04.png", srcset: "img/thumbnail/system_field04@2x.png 2x", alt: "軍団拡張画面1" },
+                    { href: "img/system/field05.png", src: "img/thumbnail/system_field05.png", srcset: "img/thumbnail/system_field05@2x.png 2x", alt: "軍団拡張画面2" },
                 ]
             },
             {
-                heading: { src: "img/text/system_field03.png", alt: "軍団を強化しよう" },
+                heading: { src: "img/text/system_field03.png", srcset: "img/text/system_field03@2x.png 2x", alt: "軍団を強化しよう" },
                 texts: ["メニュー画面から町へ繰り出すことができます。", "町では装備や戦闘の役に立つカードを購入できたり、", "キャラクターたちのショートエピソードを楽しむことが出来ます。"],
                 images: [
-                    { href: "img/system/field06.png", src: "img/thumbnail/system_field06.png", alt: "町へ行く1" },
-                    { href: "img/system/field07.png", src: "img/thumbnail/system_field07.png", alt: "町へ行く2" },
-                    { href: "img/system/field08.png", src: "img/thumbnail/system_field08.png", alt: "町へ行く3" },
+                    { href: "img/system/field06.png", src: "img/thumbnail/system_field06.png", srcset: "img/thumbnail/system_field06@2x.png 2x", alt: "町へ行く1" },
+                    { href: "img/system/field07.png", src: "img/thumbnail/system_field07.png", srcset: "img/thumbnail/system_field07@2x.png 2x", alt: "町へ行く2" },
+                    { href: "img/system/field08.png", src: "img/thumbnail/system_field08.png", srcset: "img/thumbnail/system_field08@2x.png 2x", alt: "町へ行く3" },
                 ]
             }
         ],
         battle: [
             {
-                heading: { src: "img/text/system_battle01.png", alt: "3隊VS3隊のコマンドバトル" },
+                heading: { src: "img/text/system_battle01.png", srcset: "img/text/system_battle01@2x.png 2x", alt: "3隊VS3隊のコマンドバトル" },
                 texts: ["戦闘はシンプルなコマンドバトル！", "「攻撃スキル」と「防御スキル」を使い分けて敵を撃退しよう。", "敵を捕獲してみかたにすることもできるぞ！"],
                 images: [
-                    { href: "img/system/battle01.png", src: "img/thumbnail/system_battle01.png", alt: "戦闘画面1" },
-                    { href: "img/system/battle02.png", src: "img/thumbnail/system_battle02.png", alt: "戦闘画面2" },
-                    { href: "img/system/battle03.png", src: "img/thumbnail/system_battle03.png", alt: "戦闘画面3" }
+                    { href: "img/system/battle01.png", src: "img/thumbnail/system_battle01.png", srcset: "img/thumbnail/system_battle01@2x.png 2x", alt: "戦闘画面1" },
+                    { href: "img/system/battle02.png", src: "img/thumbnail/system_battle02.png", srcset: "img/thumbnail/system_battle02@2x.png 2x", alt: "戦闘画面2" },
+                    { href: "img/system/battle03.png", src: "img/thumbnail/system_battle03.png", srcset: "img/thumbnail/system_battle03@2x.png 2x", alt: "戦闘画面3" }
                 ]
             },
             {
-                heading: { src: "img/text/system_battle02.png", alt: "さまざまなスキル" },
+                heading: { src: "img/text/system_battle02.png", srcset: "img/text/system_battle02@2x.png 2x", alt: "さまざまなスキル" },
                 texts: ["キャラクターごとに個性的なスキルが使える！"],
                 images: [
-                    { href: "img/system/battle04.png", src: "img/thumbnail/system_battle04.png", alt: "戦闘画面1", sub: { src: "img/text/system_battle_sub01.png", alt: "ターンアンデッド！" } },
-                    { href: "img/system/battle05.png", src: "img/thumbnail/system_battle05.png", alt: "戦闘画面2", sub: { src: "img/text/system_battle_sub02.png", alt: "破壊光線！！" }  },
-                    { href: "img/system/battle06.png", src: "img/thumbnail/system_battle06.png", alt: "戦闘画面3", sub: { src: "img/text/system_battle_sub03.png", alt: "ゴッドレイ！！！" }  }
+                    { href: "img/system/battle04.png", src: "img/thumbnail/system_battle04.png", srcset: "img/thumbnail/system_battle04@2x.png 2x", alt: "戦闘画面1", sub: { src: "img/text/system_battle_sub01.png", srcset: "img/text/system_battle_sub01@2x.png 2x", alt: "ターンアンデッド！" } },
+                    { href: "img/system/battle05.png", src: "img/thumbnail/system_battle05.png", srcset: "img/thumbnail/system_battle05@2x.png 2x", alt: "戦闘画面2", sub: { src: "img/text/system_battle_sub02.png", srcset: "img/text/system_battle_sub02@2x.png 2x", alt: "破壊光線！！" }  },
+                    { href: "img/system/battle06.png", src: "img/thumbnail/system_battle06.png", srcset: "img/thumbnail/system_battle06@2x.png 2x", alt: "戦闘画面3", sub: { src: "img/text/system_battle_sub03.png", srcset: "img/text/system_battle_sub03@2x.png 2x", alt: "ゴッドレイ！！！" }  }
                 ]
             },
             {
-                heading: { src: "img/text/system_battle03.png", alt: "死んだら最後の緊張感" },
+                heading: { src: "img/text/system_battle03.png", srcset: "img/text/system_battle03@2x.png 2x", alt: "死んだら最後の緊張感" },
                 texts: ["キャラクターは戦闘で死んだら最後、物語に登場しなくなります。", "キャラクターの生死でストーリーが変化するかも！？"],
                 images: [
-                    { src: "img/thumbnail/gameover.png", alt: "ゲームオーバー" },
+                    { src: "img/thumbnail/gameover.png", srcset: "img/thumbnail/gameover@2x.png 2x", alt: "ゲームオーバー" },
                 ]
             }
         ],
         drama: [
             {
-                heading: { src: "img/text/system_drama01.png", alt: "世界を彩るキャラクターたちのドラマ" },
+                heading: { src: "img/text/system_drama01.png", srcset: "img/text/system_drama01@2x.png 2x", alt: "世界を彩るキャラクターたちのドラマ" },
                 texts: null,
                 images: [
-                    { href: "img/system/drama01.png", src: "img/thumbnail/system_drama01.png", alt: "ストーリーパート1", sub: { src: "img/text/system_drama_sub01.png", alt: "" } },
-                    { href: "img/system/drama02.png", src: "img/thumbnail/system_drama02.png", alt: "ストーリーパート2" },
-                    { href: "img/system/drama03.png", src: "img/thumbnail/system_drama03.png", alt: "ストーリーパート3" },
-                    { href: "img/system/drama04.png", src: "img/thumbnail/system_drama04.png", alt: "ストーリーパート4", sub: { src: "img/text/system_drama_sub02.png", alt: "" } },
-                    { href: "img/system/drama05.png", src: "img/thumbnail/system_drama05.png", alt: "ストーリーパート5", sub: { src: "img/text/system_drama_sub03.png", alt: "" } },
-                    { href: "img/system/drama06.png", src: "img/thumbnail/system_drama06.png", alt: "ストーリーパート6" },
-                    { href: "img/system/drama07.png", src: "img/thumbnail/system_drama07.png", alt: "ストーリーパート7" },
-                    { href: "img/system/drama08.png", src: "img/thumbnail/system_drama08.png", alt: "ストーリーパート8", sub: { src: "img/text/system_drama_sub04.png", alt: "" } },
+                    { href: "img/system/drama01.png", src: "img/thumbnail/system_drama01.png", srcset: "img/thumbnail/system_drama01@2x.png 2x", alt: "ストーリーパート1", sub: { src: "img/text/system_drama_sub01.png", srcset: "img/text/system_drama_sub01@2x.png 2x", alt: "この領地、全部私にくれよ！" } },
+                    { href: "img/system/drama02.png", src: "img/thumbnail/system_drama02.png", srcset: "img/thumbnail/system_drama02@2x.png 2x", alt: "ストーリーパート2" },
+                    { href: "img/system/drama03.png", src: "img/thumbnail/system_drama03.png", srcset: "img/thumbnail/system_drama03@2x.png 2x", alt: "ストーリーパート3" },
+                    { href: "img/system/drama04.png", src: "img/thumbnail/system_drama04.png", srcset: "img/thumbnail/system_drama04@2x.png 2x", alt: "ストーリーパート4", sub: { src: "img/text/system_drama_sub02.png", srcset: "img/text/system_drama_sub02@2x.png 2x", alt: "あっ！ こら！! ワーナーだーッ！！" } },
+                    { href: "img/system/drama05.png", src: "img/thumbnail/system_drama05.png", srcset: "img/thumbnail/system_drama05@2x.png 2x", alt: "ストーリーパート5", sub: { src: "img/text/system_drama_sub03.png", srcset: "img/text/system_drama_sub03@2x.png 2x", alt: "入ったらぶっ殺すぞ！！" } },
+                    { href: "img/system/drama06.png", src: "img/thumbnail/system_drama06.png", srcset: "img/thumbnail/system_drama06@2x.png 2x", alt: "ストーリーパート6" },
+                    { href: "img/system/drama07.png", src: "img/thumbnail/system_drama07.png", srcset: "img/thumbnail/system_drama07@2x.png 2x", alt: "ストーリーパート7" },
+                    { href: "img/system/drama08.png", src: "img/thumbnail/system_drama08.png", srcset: "img/thumbnail/system_drama08@2x.png 2x", alt: "ストーリーパート8", sub: { src: "img/text/system_drama_sub04.png", srcset: "img/text/system_drama_sub04@2x.png 2x", alt: "オイお前、私についてこいよ！" } },
                 ]
             }
         ]
@@ -333,6 +351,10 @@
                 async: true
             });
             this.observe("current", this.updateGallery, { init: false, defer: true });
+        },
+
+        ondestroy() {
+            baguetteBox.destroy();
         }
     };
 </script>

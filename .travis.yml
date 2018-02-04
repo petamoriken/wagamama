@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - node
+
+dist: trusty
+sudo: false
+cache: yarn
+
+branches:
+  only:
+  - master
+
+script:
+  - NODE_ENV=release yarn run build:static
+  - NODE_ENV=release yarn run build:component
+  - yarn run deploy

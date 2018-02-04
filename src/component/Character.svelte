@@ -1,19 +1,19 @@
 <main>
     <style ref:style></style>
     <div class="wrapper">
-        <h1><img src="img/heading/character.png" alt="キャラクター"></h1>
+        <h1><img src="img/heading/character.png" srcset="img/heading/character@2x.png 2x" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" alt="左へ移動"></button>
-            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" alt="右へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
             <menu ref:menu type="toolbar">
-                <div on:swipe>
+                <div ref:outer on:swipe>
                     {{ #each characterRowItems as row, i }}
                         <div hidden="{{ displayedListRow !== i }}">
                             {{ #each row as character, j }}
                                 <li role="menuitemradio" aria-current="{{ current === i * characterRowItems[0].length + j ? 'page' : '' }}">
                                     <a href="#{{ character.id }}">
-                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" alt="{{ character.name.ja }} キャラチップ">
+                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" srcset="img/character/chip/{{ character.id }}@2x.png 2x" alt="{{ character.name.ja }} キャラチップ">
                                     </a>
                                 </li>
                             {{ /each }}
@@ -24,7 +24,7 @@
         </nav>
         <figure>
             <figcaption>
-                <h2><img src="img/character/name/{{ characters[current].id }}.png" alt="{{ characters[current].name.ja }}"></h2>
+                <h2><img src="img/character/name/{{ characters[current].id }}.png" srcset="img/character/name/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }}"></h2>
                 <hr>
                 <div class="subtext">
                     <p>cv.{{ characters[current].cv }}</p>
@@ -34,7 +34,7 @@
                     <p>{{ characters[current].description }}</p>
                 </div>
             </figcaption>
-            <img src="img/character/{{ characters[current].id }}.png" alt="{{ characters[current].name.ja }} 立ち絵">
+            <img src="img/character/{{ characters[current].id }}.png" srcset="img/character/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }} 立ち絵">
         </figure>
     </div>
 </main>
@@ -42,7 +42,7 @@
 <style>
     main {
         width: 100%;
-        color: white;
+        color: #eee;
     }
 
     .wrapper {
@@ -62,7 +62,13 @@
         left: 0;
         margin: 0;
         border: 0;
-        background: url("img/accessory/border.png");
+        background: url("img/background/border.png");
+    }
+
+    @media screen and (min-resolution: 2dppx) {
+        .wrapper > hr {
+            background: url("img/background/border@2x.png") 0/auto 100%;
+        }
     }
 
     nav {
@@ -180,9 +186,15 @@
         width: 360px;
         height: 244px;
         padding: 40px 40px 25px;
-        color: black;
+        color: #111;
         box-sizing: border-box;
-        background: url("img/accessory/comment.png");
+        background: url("img/background/comment.png");
+    }
+
+    @media screen and (min-resolution: 2dppx) {
+        .description {
+            background: url("img/background/comment@2x.png") 0/cover;
+        }
     }
 
     .description > p {
@@ -199,16 +211,15 @@
         }
 
         figure {
+            display: block;
             top: auto;
             margin: 20px 0 0;
-            flex-direction: column;
-            align-items: center;
+            min-height: 550px;
         }
 
         figcaption {
-            align-self: center;
             max-width: 80%;
-            margin-top: 0;
+            margin: 0 auto;
             transform: none;
         }
 
@@ -258,12 +269,6 @@
         { id: "seedle", name: { ja: "シードル", en: "Seedle" }, cv: "ばすにゃん", description: "エリの部下で硬い殻に覆われたシードラウトという種族の植物人。エリによくいびられているが、本人は幸せそう。" }
     ]);
 
-    function requestAfterAnimationFrame(callback) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(callback);
-        });
-    }
-
     export default {
         data() {
             return {
@@ -287,7 +292,7 @@
 
         methods: {
             displayedListRowSubsciber(displayedListRow) {
-                const element = this.refs.menu;
+                const { menu, outer } = this.refs;
                 const length = this.get("characterRowItems").length;
 
                 displayedListRow %= length;
@@ -295,14 +300,12 @@
                     displayedListRow += length;
                 }
 
-                requestAfterAnimationFrame(() => {
-                    element.scrollLeft = element.offsetWidth * displayedListRow;
-                });
+                outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow }px)`;
             },
 
             refreshDisplayedListItem() {
-                const element = this.refs.menu;
-                const width = element.offsetWidth;
+                const { menu, outer } = this.refs;
+                const width = menu.offsetWidth;
 
                 const displayedMaxListItem = width / imageWidth | 0;
 
@@ -313,11 +316,10 @@
                     const rowNum = characterRowItems.length;
 
                     // menu > div の width を合わせる
-                    const outerDivide = element.firstElementChild;
-                    outerDivide.style.width = `${ 100 * rowNum }%`;
+                    outer.style.width = `${ 100 * rowNum }%`;
 
                     // menu > div > div の width を合わせる
-                    for(const div of outerDivide.children) {
+                    for(const div of outer.childNodes) {
                         div.style.width = `calc(100% / ${ rowNum })`;
                     }
 
@@ -333,7 +335,7 @@
 
             updateCurrentByLocationHash() {
                 const hash = location.hash;
-                const index = hash ? characters.findIndex(children => `#${ children.id }` === hash) : 0;
+                const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
                 if(index !== -1) {
                     this.set({
                         current: index
@@ -353,19 +355,20 @@
             this.updateCurrentByLocationHash();
 
             // popstate イベントの監視
-            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
+            this.popstateHandler = () => this.updateCurrentByLocationHash();
+            window.addEventListener("popstate", this.popstateHandler);
 
             // menu のリサイズを監視して refreshDisplayedListItem を呼ぶ
-            const element = this.refs.menu;
-            let oldWidth = element.offsetWidth;
+            const { menu, outer } = this.refs;
+            let oldWidth = menu.offsetWidth;
             const resizeHandler = this.resizeHandler = () => {
-                const currentWidth = element.offsetWidth;
+                const currentWidth = menu.offsetWidth;
                 if(currentWidth === oldWidth) {
                     return;
                 }
 
                 this.refreshDisplayedListItem();
-                element.scrollLeft = element.offsetWidth * this.get("displayedListRow");
+                outer.style.transform = `translateX(${ - menu.offsetWidth * this.get("displayedListRow") }px)`;
 
                 oldWidth = currentWidth;
             }
@@ -374,6 +377,7 @@
 
         ondestroy() {
             window.removeEventListener("resize", this.resizeHandler);
+            window.removeEventListener("popstate", this.popstateHandler);
         },
 
         events: {
@@ -385,9 +389,9 @@
                         node.addEventListener("touchend", e => {
                             const dx = e.changedTouches[0].clientX - x;
                             if(dx < -swipeThreshold) {
-                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
-                            } else if(dx > swipeThreshold) {
                                 this.set({ displayedListRow: this.get("displayedListRow") + 1 });
+                            } else if(dx > swipeThreshold) {
+                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
                             }
                         }, { once: true });
                     }
