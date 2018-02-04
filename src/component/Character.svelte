@@ -37,12 +37,21 @@
             <img src="img/character/{{ characters[current].id }}.png" srcset="img/character/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }} 立ち絵">
         </figure>
     </div>
+    <div class="cache">
+        {{ #each characters as character }}
+            {{ character.name.ja }}{{ character.name.en }}{{ character.cv }}{{ character.description }}
+        {{ /each }}
+    </div>
 </main>
 
 <style>
     main {
         width: 100%;
         color: #eee;
+    }
+
+    main .cache {
+        display: none;
     }
 
     .wrapper {

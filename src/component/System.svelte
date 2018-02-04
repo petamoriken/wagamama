@@ -42,9 +42,25 @@
             {{ /each }}
         </div>
     </div>
+    <div class="cache">
+            {{ #each contents.field as field }}
+                {{ #each field.texts as text }}
+                    {{ text }}
+                {{ /each }}
+            {{ /each }}
+            {{ #each contents.battle as battle }}
+                {{ #each battle.texts as text }}
+                    {{ text }}
+                {{ /each }}
+            {{ /each }}
+        </div>
 </main>
 
 <style>
+    main .cache {
+        display: none;
+    }
+
     .wrapper {
         width: 1100px;
         margin: 0 auto;
