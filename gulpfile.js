@@ -65,7 +65,8 @@ gulp.task("component", () => {
             } catch(e) {
                 cb(e);
             }
-        })).pipe(gulp.dest(`${ output }/component`))
+        })).pipe($.if(() => !isDebug, $.babelMinify()))
+        .pipe(gulp.dest(`${ output }/component`))
         .on("end", () => {
             const outputPath = path.resolve(__dirname, output, "component/style.css");
 
