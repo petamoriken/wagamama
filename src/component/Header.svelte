@@ -116,12 +116,12 @@
 </style>
 
 <script>
-    const threshold = 740;
+    const media = matchMedia("screen and (max-width: 740px)");
 
     export default {
         data() {
             return {
-                isMobileView: window.innerWidth <= threshold,
+                isMobileView: media.matches,
                 isMenuOpen: false,
                 items: [
                     { id: "story", image: { src: "img/button/story.png", srcset: "img/button/story@2x.png 2x", alt: "ストーリー" } },
@@ -134,26 +134,22 @@
             }
         },
 
-        methods: {
-            resizeHandler() {
-                const isMobileView = window.innerWidth <= threshold;
-
+        oncreate() {
+            const mediaHandler = this.mediaHandler = () => {
+                const isMobileView = media.matches;
                 if(this.get("isMobileView") !== isMobileView) {
                     this.set({
                         isMobileView,
                         isMenuOpen: false
                     });
                 }
-            }
-        },
-
-        oncreate() {
-            const handler = this.boundResizeHandler = e => this.resizeHandler(e);
-            window.addEventListener("resize", handler);
+            };
+            // Safari 11.3 では MediaQueryList#addEventListener にまだ対応していない
+            media.addListener(mediaHandler);
         },
 
         ondestroy() {
-            window.removeEventListener("resize", this.boundResizeHandler);
+            media.removeListener(this.mediaHandler);
         },
 
         events: {
