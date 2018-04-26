@@ -43,6 +43,7 @@
         { /each }
     </div>
 </main>
+<svelte:window on:hashchange="updateCurrentByLocationHash()" on:resize="execRefrechDisplayedListItemByResize()"></svelte:window>
 
 <style>
     main {
@@ -305,13 +306,26 @@
                 this.set({ displayedMaxListItem: changedDisplayedMaxListItem });
             },
 
+            execRefrechDisplayedListItemByResize() {
+                const oldWidth = this._oldWidth;
+                const { menu, outer } = this.refs;
+                const currentWidth = menu.offsetWidth;
+                if (currentWidth === oldWidth) { return; }
+
+                this.refreshDisplayedListItem();
+                const { displayedListRow } = this.get();
+                outer.style.transform = `translateX(${ - currentWidth * displayedListRow }px)`;
+
+                this._oldWidth = currentWidth;
+            },
+
             updateCurrentByLocationHash() {
                 const { characters } = this.get();
                 const hash = location.hash;
                 const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
-                if (index !== -1) {
-                    this.set({ current: index });
-                }
+                if (index === -1) { return; }
+
+                this.set({ current: index });
             },
         },
 
@@ -362,31 +376,10 @@
             // location.hash で初期値の設定
             this.updateCurrentByLocationHash();
 
-            // hashchange イベントの監視
-            this.hashchangeHandler = () => this.updateCurrentByLocationHash();
-            window.addEventListener("hashchange", this.hashchangeHandler);
-
-            // menu のリサイズを監視して refreshDisplayedListItem を呼ぶ
-            const { menu, outer } = this.refs;
-            let oldWidth = menu.offsetWidth;
-            const resizeHandler = this.resizeHandler = () => {
-                const currentWidth = menu.offsetWidth;
-                if (currentWidth === oldWidth) { return; }
-
-                this.refreshDisplayedListItem();
-                const { displayedListRow } = this.get();
-                outer.style.transform = `translateX(${ - currentWidth * displayedListRow }px)`;
-
-                oldWidth = currentWidth;
-            }
-            window.addEventListener("resize", resizeHandler);
+            // execRefrechDisplayedListItemByResize で使うプロパティの設定
+            this._oldWidth = this.refs.menu.offsetWidth;
 
             this.isCreated = true;
-        },
-
-        ondestroy() {
-            window.removeEventListener("resize", this.resizeHandler);
-            window.removeEventListener("hashchange", this.hashchangeHandler);
         },
 
         events: {

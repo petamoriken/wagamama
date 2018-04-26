@@ -55,6 +55,7 @@
             { /each }
         </div>
 </main>
+<svelte:window on:hashchange="updateCurrentByLocationHash()"></svelte:window>
 
 <style>
     main .cache {
@@ -339,10 +340,10 @@
                 const { items } = this.get();
                 const hash = location.hash;
                 const index = hash ? items.findIndex(item => `#${ item.id }` === hash) : 0;
-                if (index !== -1) {
-                    this.set({ current: index });
-                }
-            }
+                if (index === -1) { return; }
+
+                this.set({ current: index });
+            },
         },
 
         onstate({ changed }) {
@@ -354,9 +355,6 @@
         oncreate() {
             // location で初期値の設定
             this.updateCurrentByLocationHash();
-
-            // popstate イベントの監視
-            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
 
             this.isCreated = true;
         },
