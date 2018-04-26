@@ -30,6 +30,6 @@
     "imagemin-pngquant": "^5.0.1",
     "postcss": "^6.0.9",
     "postcss-url": "^7.1.2",
-    "svelte": "^1.30.0"
+    "svelte": "^2.1.1"
   }
 }
