@@ -1,15 +1,14 @@
-html, body {
-    font-family: "Shin Go Medium", "Hiragino Sans", "Meiryo", sans-serif;
-    position: relative;
-    min-width: 1100px;
-    background: #111;
-}
-
 main > .wrapper {
     width: 1100px;
     margin: 0 auto;
     padding: 60px 0 0;
     color: #eee;
+}
+
+@media screen and (max-width: 740px) {
+    main > .wrapper {
+        width: 100%;
+    }
 }
 
 main h1 {
@@ -67,14 +66,4 @@ section li {
 
 section ul li:not(:last-child)::after {
     content: "、";
-}
-
-@media screen and (max-width: 740px) {
-    html, body {
-        min-width: 0;
-    }
-
-    main > .wrapper {
-        width: 100%;
-    }
 }

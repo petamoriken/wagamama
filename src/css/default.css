@@ -5,6 +5,15 @@ html, body {
     background: #111;
 }
 
+.ie {
+    color: #eee;
+    display: none;
+}
+
+.ie a {
+    color: #eee;
+}
+
 @media screen and (max-width: 740px) {
     html, body {
         min-width: 0;
