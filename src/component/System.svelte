@@ -2,7 +2,7 @@
     <div class="wrapper">
         <h1><img src="img/heading/system.png" srcset="img/heading/system@2x.png 2x" alt="ゲームシステム"></h1>
         <nav>
-            <menu type="toolbar">
+            <menu role="toolbar">
                 { #each items as item, i }
                     <li aria-current="{ current === i ? 'page' : '' }">
                         <a href="#{ item.id }"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt={ item.image.alt }></a>

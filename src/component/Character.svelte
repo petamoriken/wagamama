@@ -6,7 +6,7 @@
         <nav>
             <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
             <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
-            <menu ref:menu type="toolbar">
+            <menu ref:menu role="toolbar">
                 <div ref:outer on:swipe>
                     { #each characterRowItems as row, i }
                         <div hidden="{ displayedListRow !== i }">
