@@ -53,7 +53,7 @@ gulp.task("component", () => {
             const filename = `component/${ base }`;
 
             try {
-                const { code, css: _css } = svelte.compile(content, {
+                const { js: { code: js }, css: { code: _css } } = svelte.compile(content, {
                     format: "iife",
                     filename,
                     name,
@@ -61,7 +61,7 @@ gulp.task("component", () => {
                 });
                 css += _css;
                 file.path = path.resolve(dir, name + ".js");
-                cb(null, code);
+                cb(null, js);
             } catch(e) {
                 cb(e);
             }

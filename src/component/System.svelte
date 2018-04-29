@@ -2,59 +2,60 @@
     <div class="wrapper">
         <h1><img src="img/heading/system.png" srcset="img/heading/system@2x.png 2x" alt="ゲームシステム"></h1>
         <nav>
-            <menu type="toolbar">
-                {{ #each items as item, i }}
-                    <li aria-current="{{ current === i ? 'page' : '' }}">
-                        <a href="#{{ item.id }}"><img src="{{ item.image.src }}" srcset="{{ item.image.srcset }}" alt={{ item.image.alt }}></a>
+            <menu role="toolbar">
+                { #each items as item, i }
+                    <li aria-current="{ current === i ? 'page' : '' }">
+                        <a href="#{ item.id }"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt={ item.image.alt }></a>
                     </li>
-                {{ /each }}
+                { /each }
             </menu>
         </nav>
         <hr>
-        <div class="gallery {{ items[current].id }}">
-            {{ #each contents[items[current].id] as content }}
+        <div class="gallery { items[current].id }">
+            { #each contents[items[current].id] as content }
                 <section>
-                    <h2><img src="{{ content.heading.src }}" srcset="{{ content.heading.srcset}}" alt="{{ content.heading.alt }}"></h2>
-                    {{ #if content.texts !== null }}
+                    <h2><img src="{ content.heading.src }" srcset="{ content.heading.srcset}" alt="{ content.heading.alt }"></h2>
+                    { #if content.texts !== null }
                         <p>
-                            {{ #each content.texts as text }}
-                                {{ text }}<br>
-                            {{ /each }}
+                            { #each content.texts as text }
+                                { text }<br>
+                            { /each }
                         </p>
-                    {{ /if }}
+                    { /if }
                     <div class="thumbnail">
-                        {{ #each content.images as image }}
+                        { #each content.images as image }
                             <div>
-                                {{ #if image.href }}
-                                    <a href="{{ image.href }}">
-                                        <img src="{{ image.src }}" srcset="{{ image.srcset }}" alt="{{ image.alt }}">
+                                { #if image.href }
+                                    <a href="{ image.href }">
+                                        <img src="{ image.src }" srcset="{ image.srcset }" alt="{ image.alt }">
                                     </a>
-                                {{ else }}
-                                    <img src="{{ image.src }}" srcset="{{ image.srcset }}" alt="{{ image.alt }}">
-                                {{ /if }}
-                                {{ #if image.sub }}
-                                    <img class="sub" src="{{ image.sub.src }}" srcset="{{ image.sub.srcset }}" alt="{{ image.sub.alt }}">
-                                {{ /if }}
+                                { :else }
+                                    <img src="{ image.src }" srcset="{ image.srcset }" alt="{ image.alt }">
+                                { /if }
+                                { #if image.sub }
+                                    <img class="sub" src="{ image.sub.src }" srcset="{ image.sub.srcset }" alt="{ image.sub.alt }">
+                                { /if }
                             </div>
-                        {{ /each }}
+                        { /each }
                     </div>
                 </section>
-            {{ /each }}
+            { /each }
         </div>
     </div>
     <div class="cache">
-            {{ #each contents.field as field }}
-                {{ #each field.texts as text }}
-                    {{ text }}
-                {{ /each }}
-            {{ /each }}
-            {{ #each contents.battle as battle }}
-                {{ #each battle.texts as text }}
-                    {{ text }}
-                {{ /each }}
-            {{ /each }}
+            { #each contents.field as field }
+                { #each field.texts as text }
+                    { text }
+                { /each }
+            { /each }
+            { #each contents.battle as battle }
+                { #each battle.texts as text }
+                    { text }
+                { /each }
+            { /each }
         </div>
 </main>
+<svelte:window on:hashchange="updateCurrentByLocationHash()"></svelte:window>
 
 <style>
     main .cache {
@@ -248,7 +249,7 @@
     const items = Object.freeze([
         { id: "field", image: { src: "img/button/field.png", srcset: "img/button/field@2x.png 2x", alt: "フィールド" } },
         { id: "battle", image: { src: "img/button/battle.png", srcset: "img/button/battle@2x.png 2x", alt: "バトル" } },
-        { id: "drama", image: { src: "img/button/drama.png", srcset: "img/button/drama@2x.png 2x", alt: "ドラマシーン" } }
+        { id: "drama", image: { src: "img/button/drama.png", srcset: "img/button/drama@2x.png 2x", alt: "ドラマシーン" } },
     ]);
 
     const contents = Object.freeze({
@@ -260,7 +261,7 @@
                     { href: "img/system/field01.png", src: "img/thumbnail/system_field01.png", srcset: "img/thumbnail/system_field01@2x.png 2x", alt: "マップ画面1" },
                     { href: "img/system/field02.png", src: "img/thumbnail/system_field02.png", srcset: "img/thumbnail/system_field02@2x.png 2x", alt: "マップ画面2" },
                     { href: "img/system/field03.png", src: "img/thumbnail/system_field03.png", srcset: "img/thumbnail/system_field03@2x.png 2x", alt: "マップ画面3" }
-                ]
+                ],
             },
             {
                 heading: { src: "img/text/system_field02.png", srcset: "img/text/system_field02@2x.png 2x", alt: "軍団を強化しよう" },
@@ -268,7 +269,7 @@
                 images: [
                     { href: "img/system/field04.png", src: "img/thumbnail/system_field04.png", srcset: "img/thumbnail/system_field04@2x.png 2x", alt: "軍団拡張画面1" },
                     { href: "img/system/field05.png", src: "img/thumbnail/system_field05.png", srcset: "img/thumbnail/system_field05@2x.png 2x", alt: "軍団拡張画面2" },
-                ]
+                ],
             },
             {
                 heading: { src: "img/text/system_field03.png", srcset: "img/text/system_field03@2x.png 2x", alt: "軍団を強化しよう" },
@@ -277,8 +278,8 @@
                     { href: "img/system/field06.png", src: "img/thumbnail/system_field06.png", srcset: "img/thumbnail/system_field06@2x.png 2x", alt: "町へ行く1" },
                     { href: "img/system/field07.png", src: "img/thumbnail/system_field07.png", srcset: "img/thumbnail/system_field07@2x.png 2x", alt: "町へ行く2" },
                     { href: "img/system/field08.png", src: "img/thumbnail/system_field08.png", srcset: "img/thumbnail/system_field08@2x.png 2x", alt: "町へ行く3" },
-                ]
-            }
+                ],
+            },
         ],
         battle: [
             {
@@ -288,7 +289,7 @@
                     { href: "img/system/battle01.png", src: "img/thumbnail/system_battle01.png", srcset: "img/thumbnail/system_battle01@2x.png 2x", alt: "戦闘画面1" },
                     { href: "img/system/battle02.png", src: "img/thumbnail/system_battle02.png", srcset: "img/thumbnail/system_battle02@2x.png 2x", alt: "戦闘画面2" },
                     { href: "img/system/battle03.png", src: "img/thumbnail/system_battle03.png", srcset: "img/thumbnail/system_battle03@2x.png 2x", alt: "戦闘画面3" }
-                ]
+                ],
             },
             {
                 heading: { src: "img/text/system_battle02.png", srcset: "img/text/system_battle02@2x.png 2x", alt: "さまざまなスキル" },
@@ -297,15 +298,15 @@
                     { href: "img/system/battle04.png", src: "img/thumbnail/system_battle04.png", srcset: "img/thumbnail/system_battle04@2x.png 2x", alt: "戦闘画面1", sub: { src: "img/text/system_battle_sub01.png", srcset: "img/text/system_battle_sub01@2x.png 2x", alt: "ターンアンデッド！" } },
                     { href: "img/system/battle05.png", src: "img/thumbnail/system_battle05.png", srcset: "img/thumbnail/system_battle05@2x.png 2x", alt: "戦闘画面2", sub: { src: "img/text/system_battle_sub02.png", srcset: "img/text/system_battle_sub02@2x.png 2x", alt: "破壊光線！！" }  },
                     { href: "img/system/battle06.png", src: "img/thumbnail/system_battle06.png", srcset: "img/thumbnail/system_battle06@2x.png 2x", alt: "戦闘画面3", sub: { src: "img/text/system_battle_sub03.png", srcset: "img/text/system_battle_sub03@2x.png 2x", alt: "ゴッドレイ！！！" }  }
-                ]
+                ],
             },
             {
                 heading: { src: "img/text/system_battle03.png", srcset: "img/text/system_battle03@2x.png 2x", alt: "死んだら最後の緊張感" },
                 texts: ["キャラクターは戦闘で死んだら最後、物語に登場しなくなります。", "キャラクターの生死でストーリーが変化するかも！？"],
                 images: [
                     { src: "img/thumbnail/gameover.png", srcset: "img/thumbnail/gameover@2x.png 2x", alt: "ゲームオーバー" },
-                ]
-            }
+                ],
+            },
         ],
         drama: [
             {
@@ -320,9 +321,9 @@
                     { href: "img/system/drama06.png", src: "img/thumbnail/system_drama06.png", srcset: "img/thumbnail/system_drama06@2x.png 2x", alt: "ストーリーパート6" },
                     { href: "img/system/drama07.png", src: "img/thumbnail/system_drama07.png", srcset: "img/thumbnail/system_drama07@2x.png 2x", alt: "ストーリーパート7" },
                     { href: "img/system/drama08.png", src: "img/thumbnail/system_drama08.png", srcset: "img/thumbnail/system_drama08@2x.png 2x", alt: "ストーリーパート8", sub: { src: "img/text/system_drama_sub04.png", srcset: "img/text/system_drama_sub04@2x.png 2x", alt: "オイお前、私についてこいよ！" } },
-                ]
-            }
-        ]
+                ],
+            },
+        ],
     });
 
     export default {
@@ -330,27 +331,24 @@
             return {
                 current: 0,
                 items,
-                contents
+                contents,
             };
         },
 
         methods: {
-            updateGallery() {
-                baguetteBox.destroy();
-                baguetteBox.run(".gallery", {
-                    captions: false,
-                    async: true
-                });
-            },
-
             updateCurrentByLocationHash() {
+                const { items } = this.get();
                 const hash = location.hash;
                 const index = hash ? items.findIndex(item => `#${ item.id }` === hash) : 0;
-                if(index !== -1) {
-                    this.set({
-                        current: index
-                    });
-                }
+                if (index === -1) { return; }
+
+                this.set({ current: index });
+            },
+        },
+
+        onstate({ changed }) {
+            if (this.isCreated && changed.current) {
+                baguetteBox.destroy();
             }
         },
 
@@ -358,20 +356,22 @@
             // location で初期値の設定
             this.updateCurrentByLocationHash();
 
-            // popstate イベントの監視
-            window.addEventListener("popstate", () => this.updateCurrentByLocationHash());
+            this.isCreated = true;
+        },
 
-            // モーダルの登録
-            baguetteBox.run(".gallery", {
-                captions: false,
-                async: true
-            });
-            this.observe("current", this.updateGallery, { init: false, defer: true });
+        onupdate({ changed }) {
+            if (changed.current) {
+                // モーダルの登録
+                baguetteBox.run(".gallery", {
+                    captions: false,
+                    async: true,
+                });
+            }
         },
 
         ondestroy() {
             baguetteBox.destroy();
-        }
+        },
     };
 </script>
 

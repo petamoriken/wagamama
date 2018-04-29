@@ -6,43 +6,44 @@
         <nav>
             <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
             <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
-            <menu ref:menu type="toolbar">
+            <menu ref:menu role="toolbar">
                 <div ref:outer on:swipe>
-                    {{ #each characterRowItems as row, i }}
-                        <div hidden="{{ displayedListRow !== i }}">
-                            {{ #each row as character, j }}
-                                <li role="menuitemradio" aria-current="{{ current === i * characterRowItems[0].length + j ? 'page' : '' }}">
-                                    <a href="#{{ character.id }}">
-                                        <img width="80" height="80" src="img/character/chip/{{ character.id }}.png" srcset="img/character/chip/{{ character.id }}@2x.png 2x" alt="{{ character.name.ja }} キャラチップ">
+                    { #each characterRowItems as row, i }
+                        <div hidden="{ displayedListRow !== i }">
+                            { #each row as character, j }
+                                <li role="menuitemradio" aria-current="{ current === i * characterRowItems[0].length + j ? 'page' : '' }">
+                                    <a href="#{ character.id }">
+                                        <img width="80" height="80" src="img/character/chip/{ character.id }.png" srcset="img/character/chip/{ character.id }@2x.png 2x" alt="{ character.name.ja } キャラチップ">
                                     </a>
                                 </li>
-                            {{ /each }}
+                            { /each }
                         </div>
-                    {{ /each }}
+                    { /each }
                 </div>
             </menu>
         </nav>
         <figure>
             <figcaption>
-                <h2><img src="img/character/name/{{ characters[current].id }}.png" srcset="img/character/name/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }}"></h2>
+                <h2><img src="img/character/name/{ characters[current].id }.png" srcset="img/character/name/{ characters[current].id }@2x.png 2x" alt="{ characters[current].name.ja }"></h2>
                 <hr>
                 <div class="subtext">
-                    <p>cv.{{ characters[current].cv }}</p>
-                    <p>{{ characters[current].name.en }}</p>
+                    <p>cv.{ characters[current].cv }</p>
+                    <p>{ characters[current].name.en }</p>
                 </div>
                 <div class="description">
-                    <p>{{ characters[current].description }}</p>
+                    <p>{ characters[current].description }</p>
                 </div>
             </figcaption>
-            <img src="img/character/{{ characters[current].id }}.png" srcset="img/character/{{ characters[current].id }}@2x.png 2x" alt="{{ characters[current].name.ja }} 立ち絵">
+            <img src="img/character/{ characters[current].id }.png" srcset="img/character/{ characters[current].id }@2x.png 2x" alt="{ characters[current].name.ja } 立ち絵">
         </figure>
     </div>
     <div class="cache">
-        {{ #each characters as character }}
-            {{ character.name.ja }}{{ character.name.en }}{{ character.cv }}{{ character.description }}
-        {{ /each }}
+        { #each characters as character }
+            { character.name.ja }{ character.name.en }{ character.cv }{ character.description }
+        { /each }
     </div>
 </main>
+<svelte:window on:hashchange="updateCurrentByLocationHash()" on:resize="execRefrechDisplayedListItemByResize()"></svelte:window>
 
 <style>
     main {
@@ -128,12 +129,6 @@
         padding: 0;
         flex-grow: 1;
         text-align: center;
-    }
-
-    li > button {
-        padding: 0;
-        border: 0;
-        background: unset;
     }
 
     li img {
@@ -275,7 +270,7 @@
         { id: "nia", name: { ja: "ニア", en: "Nia" }, cv: "雪村望", description: "双子の姉ライザとともに師匠であるヴェロニカを裏切る。かなり天然な性格で、かなり残酷な一面も見せる。魔女としての実力はライザ並にあるが、軍団の指揮能力はイマイチなようだ。" },
         { id: "veronica", name: { ja: "ヴェロニカ", en: "Veronica" }, cv: "中月りえ", description: "ライザとニアの師匠で、アリスの姉弟子。ライザとニアの裏切りにあり、領地を追われる。その後、部下のエリ、シードルとともにライザ軍と大戦争を繰り広げることになる。" },
         { id: "eri", name: { ja: "エリ", en: "Eri" }, cv: "霜月", description: "ヴェロニカの部下の少女。腹が立つと部下のシードルを蹴りまくるドSの女王様な一面を持つ。人間だが魔法が使える不思議な少女。彼女には、外には言えない秘密があるようだが……？" },
-        { id: "seedle", name: { ja: "シードル", en: "Seedle" }, cv: "ばすにゃん", description: "エリの部下で硬い殻に覆われたシードラウトという種族の植物人。エリによくいびられているが、本人は幸せそう。" }
+        { id: "seedle", name: { ja: "シードル", en: "Seedle" }, cv: "ばすにゃん", description: "エリの部下で硬い殻に覆われたシードラウトという種族の植物人。エリによくいびられているが、本人は幸せそう。" },
     ]);
 
     export default {
@@ -284,130 +279,129 @@
                 displayedListRow: 0,
                 displayedMaxListItem: 6,
                 current: 0,
-                characters
+                characters,
             };
         },
 
         computed: {
-            displayedListRow: (current, displayedMaxListItem) => current / displayedMaxListItem | 0,
-            characterRowItems: (characters, displayedMaxListItem) => {
+            displayedListRow: ({ current, displayedMaxListItem }) => current / displayedMaxListItem | 0,
+            characterRowItems: ({ characters, displayedMaxListItem }) => {
                 const ret = [];
-                for(let i = 0, l = Math.ceil(characters.length / displayedMaxListItem); i < l; ++i) {
+                for (let i = 0, l = Math.ceil(characters.length / displayedMaxListItem); i < l; ++i) {
                     ret.push(characters.slice(i * displayedMaxListItem, (i + 1) * displayedMaxListItem));
                 }
                 return ret;
-            }
+            },
         },
 
         methods: {
-            displayedListRowSubsciber(displayedListRow) {
-                const { menu, outer } = this.refs;
-                const length = this.get("characterRowItems").length;
-
-                displayedListRow %= length;
-                if(displayedListRow < 0) {
-                    displayedListRow += length;
-                }
-
-                outer.style.transform = `translateX(${ - menu.offsetWidth * displayedListRow }px)`;
-            },
-
             refreshDisplayedListItem() {
-                const { menu, outer } = this.refs;
+                const { displayedMaxListItem, characterRowItems } = this.get();
+                const { menu } = this.refs;
                 const width = menu.offsetWidth;
 
-                const displayedMaxListItem = width / imageWidth | 0;
+                const changedDisplayedMaxListItem = width / imageWidth | 0;
+                if (displayedMaxListItem === changedDisplayedMaxListItem) { return; }
 
-                if(this.get("displayedMaxListItem") !== displayedMaxListItem) {
-                    this.set({ displayedMaxListItem });
+                this.set({ displayedMaxListItem: changedDisplayedMaxListItem });
+            },
 
-                    const characterRowItems = this.get("characterRowItems");
-                    const rowNum = characterRowItems.length;
+            execRefrechDisplayedListItemByResize() {
+                const oldWidth = this._oldWidth;
+                const { menu, outer } = this.refs;
+                const currentWidth = menu.offsetWidth;
+                if (currentWidth === oldWidth) { return; }
 
-                    // menu > div の width を合わせる
-                    outer.style.width = `${ 100 * rowNum }%`;
+                this.refreshDisplayedListItem();
+                const { displayedListRow } = this.get();
+                outer.style.transform = `translateX(${ - currentWidth * displayedListRow }px)`;
 
-                    // menu > div > div の width を合わせる
-                    for(const div of outer.childNodes) {
-                        div.style.width = `calc(100% / ${ rowNum })`;
-                    }
-
-                    // 最後の行を左寄せにする
-                    if(displayedMaxListItem !== 1) {
-                        const rest = displayedMaxListItem - characterRowItems[characterRowItems.length - 1].length;
-                        this.refs.style.textContent = `main menu > div > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
-                    } else {
-                        this.refs.style.textContent = "";
-                    }
-                }
+                this._oldWidth = currentWidth;
             },
 
             updateCurrentByLocationHash() {
+                const { characters } = this.get();
                 const hash = location.hash;
                 const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
-                if(index !== -1) {
-                    this.set({
-                        current: index
-                    });
+                if (index === -1) { return; }
+
+                this.set({ current: index });
+            },
+        },
+
+        onstate({ changed, current }) {
+            // arrow がクリックされたり、swipe されて displayedListRow が変更されるのを監視する
+            if (this.isCreated && changed.displayedListRow) {
+                const { characterRowItems, displayedListRow } = current;
+                const length = characterRowItems.length;
+                const { menu, outer } = this.refs;
+
+                let currentDisplayedListRow = displayedListRow % length;
+                if (currentDisplayedListRow < 0) {
+                    currentDisplayedListRow += length;
+                }
+
+                // menu > div の位置を変える
+                outer.style.transform = `translateX(${ - menu.offsetWidth * currentDisplayedListRow }px)`;
+            }
+
+            // menu がリサイズされて　displayedMaxListItem が変更されるのを監視する
+            if(changed.displayedMaxListItem) {
+                const { characterRowItems, displayedMaxListItem } = current;
+                const rowNum = characterRowItems.length;
+                const { outer } = this.refs;
+
+                // menu > div の width を合わせる
+                outer.style.width = `${ 100 * rowNum }%`;
+
+                // menu > div > div の width を合わせる
+                for (const div of outer.childNodes) {
+                    div.style.width = `calc(100% / ${ rowNum })`;
+                }
+
+                // 最後の行を左寄せにする
+                if (displayedMaxListItem !== 1) {
+                    const rest = displayedMaxListItem - characterRowItems[characterRowItems.length - 1].length;
+                    this.refs.style.textContent = `main menu > div > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
+                } else {
+                    this.refs.style.textContent = "";
                 }
             }
         },
 
         oncreate() {
-            // arrow がクリックされたり、swipe されて displayedListRow が変更されるのを監視する
-            this.observe("displayedListRow", this.displayedListRowSubsciber, { init: false });
-
             // menu の表示領域を確認して、displayedMaxListItem を変更したり style を変える
             this.refreshDisplayedListItem();
 
-            // location で初期値の設定
+            // location.hash で初期値の設定
             this.updateCurrentByLocationHash();
 
-            // popstate イベントの監視
-            this.popstateHandler = () => this.updateCurrentByLocationHash();
-            window.addEventListener("popstate", this.popstateHandler);
+            // execRefrechDisplayedListItemByResize で使うプロパティの設定
+            this._oldWidth = this.refs.menu.offsetWidth;
 
-            // menu のリサイズを監視して refreshDisplayedListItem を呼ぶ
-            const { menu, outer } = this.refs;
-            let oldWidth = menu.offsetWidth;
-            const resizeHandler = this.resizeHandler = () => {
-                const currentWidth = menu.offsetWidth;
-                if(currentWidth === oldWidth) {
-                    return;
-                }
-
-                this.refreshDisplayedListItem();
-                outer.style.transform = `translateX(${ - menu.offsetWidth * this.get("displayedListRow") }px)`;
-
-                oldWidth = currentWidth;
-            }
-            window.addEventListener("resize", resizeHandler);
-        },
-
-        ondestroy() {
-            window.removeEventListener("resize", this.resizeHandler);
-            window.removeEventListener("popstate", this.popstateHandler);
+            this.isCreated = true;
         },
 
         events: {
             swipe(node, callback) {
-                if("ontouchstart" in window) {
+                if ("ontouchstart" in window) {
                     const ontouchstart = e => {
                         const x = e.touches[0].clientX;
 
                         node.addEventListener("touchend", e => {
+                            const { displayedListRow } = this.get();
                             const dx = e.changedTouches[0].clientX - x;
-                            if(dx < -swipeThreshold) {
-                                this.set({ displayedListRow: this.get("displayedListRow") + 1 });
-                            } else if(dx > swipeThreshold) {
-                                this.set({ displayedListRow: this.get("displayedListRow") - 1 });
+                            if (dx < -swipeThreshold) {
+                                this.set({ displayedListRow: displayedListRow + 1 });
+                            } else if (dx > swipeThreshold) {
+                                this.set({ displayedListRow: displayedListRow - 1 });
                             }
                         }, { once: true });
                     }
                     node.addEventListener("touchstart", ontouchstart);
 
                     return {
-                        teardown() {
+                        destroy() {
                             node.removeEventListener("touchstart", ontouchstart);
                         }
                     };
@@ -415,7 +409,7 @@
             },
 
             tap(node, callback) {
-                if("ontouchstart" in window) {
+                if ("ontouchstart" in window) {
                     const hasPointerEvent = "onpointerdown" in window;
 
                     const startHandler = hasPointerEvent ? "pointerdown" : "touchstart";
@@ -431,7 +425,7 @@
                         node.addEventListener(moveHandler, onmove);
 
                         node.addEventListener(endHandler, e => {
-                            if(isTap) {
+                            if (isTap) {
                                 callback(e);
                             }
                             node.removeEventListener(moveHandler, onmove);
@@ -440,7 +434,7 @@
                     node.addEventListener(startHandler, onstart);
 
                     return {
-                        teardown() {
+                        destroy() {
                             node.removeEventListener(startHandler, onstart);
                         }
                     };
@@ -449,12 +443,12 @@
                     node.addEventListener("click", onclick);
 
                     return {
-                        teardown() {
+                        destroy() {
                             node.removeEventListener("click", onclick);
                         }
                     };
                 }
-            }
-        }
+            },
+        },
     };
 </script>

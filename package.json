@@ -15,12 +15,12 @@
     "clean": "rm -rf build"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.2",
+    "autoprefixer": "^8.3.0",
     "babel-eslint": "^8.2.1",
     "eslint": "^4.1.1",
     "ftp": "^0.3.10",
     "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-babel-minify": "^0.3.0",
+    "gulp-babel-minify": "^0.4.0",
     "gulp-each": "^0.5.0",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^4.1.0",
@@ -30,6 +30,6 @@
     "imagemin-pngquant": "^5.0.1",
     "postcss": "^6.0.9",
     "postcss-url": "^7.1.2",
-    "svelte": "^1.30.0"
+    "svelte": "^2.1.1"
   }
 }

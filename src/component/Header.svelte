@@ -1,16 +1,16 @@
-<header class={{ isMenuOpen ? "open" : "" }}>
+<header class={ isMenuOpen ? "open" : "" }>
     <div class="wrapper">
         <a href="./"><img src="img/accessory/logo.png" srcset="img/accessory/logo@2x.png 2x" alt="ロゴ"></a>
-        {{ #if isMobileView }}
+        { #if isMobileView }
             <button on:tap="set({ isMenuOpen: !isMenuOpen })"><img src="img/button/menu.png" srcset="img/button/menu@2x.png 2x" alt="メニューボタン"></button>
-        {{ /if }}
-        <nav hidden={{ isMobileView && !isMenuOpen }}>
-            <ul role={{ isMobileView ? "menu" : "" }}>
-                {{ #each items as item }}
-                    <li role={{ isMobileView ? "menuitem" : "" }}>
-                        <a href="{{ item.id }}.html"><img src="{{ item.image.src }}" srcset="{{ item.image.srcset }}" alt="{{ item.image.alt }}"></a>
+        { /if }
+        <nav hidden={ isMobileView && !isMenuOpen }>
+            <ul role={ isMobileView ? "menu" : "" }>
+                { #each items as item }
+                    <li role={ isMobileView ? "menuitem" : "" }>
+                        <a href="{ item.id }.html"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt="{ item.image.alt }"></a>
                     </li>
-                {{ /each }}
+                { /each }
             </ul>
         </nav>
     </div>
@@ -129,21 +129,27 @@
                     { id: "character", image: { src: "img/button/character.png", srcset: "img/button/character@2x.png 2x", alt: "キャラクター" } },
                     { id: "download", image: { src: "img/button/download.png", srcset: "img/button/download@2x.png 2x", alt: "ダウンロード" } },
                     { id: "movie", image: { src: "img/button/movie.png", srcset: "img/button/movie@2x.png 2x", alt: "ムービー" } },
-                    { id: "contact", image: { src: "img/button/contact.png", srcset: "img/button/contact@2x.png 2x", alt: "コンタクト" } }
-                ]
-            }
+                    { id: "contact", image: { src: "img/button/contact.png", srcset: "img/button/contact@2x.png 2x", alt: "コンタクト" } },
+                ],
+            };
+        },
+
+        methods: {
+            updateIsMobileViewByMediaQuery() {
+                const { isMobileView } = this.get();
+                const changedIsMobileView = media.matches;
+                if (isMobileView === changedIsMobileView) { return; }
+
+                this.set({
+                    isMobileView: changedIsMobileView,
+                    isMenuOpen: false,
+                });
+            },
         },
 
         oncreate() {
-            const mediaHandler = this.mediaHandler = () => {
-                const isMobileView = media.matches;
-                if(this.get("isMobileView") !== isMobileView) {
-                    this.set({
-                        isMobileView,
-                        isMenuOpen: false
-                    });
-                }
-            };
+            const mediaHandler = this.mediaHandler = () => this.updateIsMobileViewByMediaQuery();
+
             // Safari 11.3 では MediaQueryList#addEventListener にまだ対応していない
             media.addListener(mediaHandler);
         },
@@ -154,7 +160,7 @@
 
         events: {
             tap(node, callback) {
-                if("ontouchstart" in window) {
+                if ("ontouchstart" in window) {
                     const hasPointerEvent = "onpointerdown" in window;
 
                     const startHandler = hasPointerEvent ? "pointerdown" : "touchstart";
@@ -170,7 +176,7 @@
                         node.addEventListener(moveHandler, onmove);
 
                         node.addEventListener(endHandler, e => {
-                            if(isTap) {
+                            if (isTap) {
                                 callback(e);
                             }
                             node.removeEventListener(moveHandler, onmove);
@@ -179,7 +185,7 @@
                     node.addEventListener(startHandler, onstart);
 
                     return {
-                        teardown() {
+                        destroy() {
                             node.removeEventListener(startHandler, onstart);
                         }
                     };
@@ -188,12 +194,12 @@
                     node.addEventListener("click", onclick);
 
                     return {
-                        teardown() {
+                        destroy() {
                             node.removeEventListener("click", onclick);
                         }
                     };
                 }
-            }
-        }
+            },
+        },
     };
 </script>
