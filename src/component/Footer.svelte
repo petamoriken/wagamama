@@ -38,7 +38,7 @@
     footer > dl > dt {
         height: 2em;
         display: flex;
-        flex-basis: 15%;
+        flex-basis: 14%;
         box-sizing: border-box;
         margin: 6px 0;
         border: 1px solid #ccc;
@@ -57,7 +57,7 @@
     }
 
     footer > dl > dd:nth-of-type(2n) {
-        flex-basis: 42%;
+        flex-basis: 44%;
     }
 
     dd > dl {
