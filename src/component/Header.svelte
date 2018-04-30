@@ -1,13 +1,13 @@
-<header class={ isMenuOpen ? "open" : "" }>
+<header class="{ isMenuOpen ? 'open' : '' }">
     <div class="wrapper">
         <a href="./"><img src="img/accessory/logo.png" srcset="img/accessory/logo@2x.png 2x" alt="ロゴ"></a>
         { #if isMobileView }
             <button on:tap="set({ isMenuOpen: !isMenuOpen })"><img src="img/button/menu.png" srcset="img/button/menu@2x.png 2x" alt="メニューボタン"></button>
         { /if }
-        <nav hidden={ isMobileView && !isMenuOpen }>
-            <ul role={ isMobileView ? "menu" : "" }>
+        <nav hidden="{ isMobileView && !isMenuOpen }">
+            <ul role="{ isMobileView ? 'menu' : '' }">
                 { #each items as item }
-                    <li role={ isMobileView ? "menuitem" : "" }>
+                    <li role="{ isMobileView ? 'menuitem' : '' }">
                         <a href="{ item.id }.html"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt="{ item.image.alt }"></a>
                     </li>
                 { /each }

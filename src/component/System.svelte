@@ -2,10 +2,10 @@
     <div class="wrapper">
         <h1><img src="img/heading/system.png" srcset="img/heading/system@2x.png 2x" alt="ゲームシステム"></h1>
         <nav>
-            <menu role="toolbar">
+            <menu>
                 { #each items as item, i }
-                    <li aria-current="{ current === i ? 'page' : '' }">
-                        <a href="#{ item.id }"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt={ item.image.alt }></a>
+                    <li role="menuitemradio" aria-checked="{ current === i ? 'true' : 'false' }">
+                        <a href="#{ item.id }" aria-current="{ current === i ? 'page' : '' }"><img src="{ item.image.src }" srcset="{ item.image.srcset }" alt="{ item.image.alt }"></a>
                     </li>
                 { /each }
             </menu>
@@ -102,7 +102,7 @@
         justify-content: space-between;
     }
 
-    menu li[aria-current="page"] {
+    menu li[aria-checked="true"] {
         position: relative;
         z-index: 100;
     }

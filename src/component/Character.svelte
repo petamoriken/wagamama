@@ -4,15 +4,15 @@
         <h1><img src="img/heading/character.png" srcset="img/heading/character@2x.png 2x" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="左へ移動"></button>
-            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="右へ移動"></button>
-            <menu ref:menu role="toolbar">
+            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
+            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
+            <menu ref:menu>
                 <div ref:outer on:swipe>
                     { #each characterRowItems as row, i }
                         <div hidden="{ displayedListRow !== i }">
                             { #each row as character, j }
-                                <li role="menuitemradio" aria-current="{ current === i * characterRowItems[0].length + j ? 'page' : '' }">
-                                    <a href="#{ character.id }">
+                                <li role="menuitemradio" aria-checked="{ current === i * characterRowItems[0].length + j ? 'true' : 'false' }">
+                                    <a href="#{ character.id }" aria-current="{ current === i * characterRowItems[0].length + j ? 'page' : '' }">
                                         <img width="80" height="80" src="img/character/chip/{ character.id }.png" srcset="img/character/chip/{ character.id }@2x.png 2x" alt="{ character.name.ja } キャラチップ">
                                     </a>
                                 </li>
@@ -136,14 +136,12 @@
         vertical-align: top;
     }
 
-    li[aria-current="page"] img {
+    li img:hover {
         opacity: 1;
     }
 
-    @media screen and (min-width: 740px) {
-        li:not([aria-selected="page"]) img:hover {
-            opacity: 1;
-        }
+    li[aria-checked="true"] img {
+        opacity: 1;
     }
 
     figure {
