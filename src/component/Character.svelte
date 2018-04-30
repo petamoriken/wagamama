@@ -1,18 +1,17 @@
 <main>
-    <style ref:style></style>
     <div class="wrapper">
         <h1><img src="img/heading/character.png" srcset="img/heading/character@2x.png 2x" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ displayedListRow: displayedListRow - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
-            <button on:tap="set({ displayedListRow: displayedListRow + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
+            <button on:tap="set({ menuGroupIndex: menuGroupIndex - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
+            <button on:tap="set({ menuGroupIndex: menuGroupIndex + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
             <menu ref:menu>
-                <div ref:outer on:swipe>
-                    { #each characterRowItems as row, i }
-                        <div hidden="{ displayedListRow !== i }">
-                            { #each row as character, j }
-                                <li role="menuitemradio" aria-checked="{ current === i * characterRowItems[0].length + j ? 'true' : 'false' }">
-                                    <a href="#{ character.id }" aria-current="{ current === i * characterRowItems[0].length + j ? 'page' : '' }">
+                <div on:swipe>
+                    { #each menuGroups as group, i }
+                        <div hidden="{ menuGroupIndex !== i }">
+                            { #each group as character, j }
+                                <li role="menuitemradio" aria-checked="{ characterIndex === i * menuGroups[0].length + j ? 'true' : 'false' }">
+                                    <a href="#{ character.id }" aria-current="{ characterIndex === i * menuGroups[0].length + j ? 'page' : '' }">
                                         <img width="80" height="80" src="img/character/chip/{ character.id }.png" srcset="img/character/chip/{ character.id }@2x.png 2x" alt="{ character.name.ja } キャラチップ">
                                     </a>
                                 </li>
@@ -24,17 +23,17 @@
         </nav>
         <figure>
             <figcaption>
-                <h2><img src="img/character/name/{ characters[current].id }.png" srcset="img/character/name/{ characters[current].id }@2x.png 2x" alt="{ characters[current].name.ja }"></h2>
+                <h2><img src="img/character/name/{ characters[characterIndex].id }.png" srcset="img/character/name/{ characters[characterIndex].id }@2x.png 2x" alt="{ characters[characterIndex].name.ja }"></h2>
                 <hr>
                 <div class="subtext">
-                    <p>cv.{ characters[current].cv }</p>
-                    <p>{ characters[current].name.en }</p>
+                    <p>cv.{ characters[characterIndex].cv }</p>
+                    <p>{ characters[characterIndex].name.en }</p>
                 </div>
                 <div class="description">
-                    <p>{ characters[current].description }</p>
+                    <p>{ characters[characterIndex].description }</p>
                 </div>
             </figcaption>
-            <img src="img/character/{ characters[current].id }.png" srcset="img/character/{ characters[current].id }@2x.png 2x" alt="{ characters[current].name.ja } 立ち絵">
+            <img src="img/character/{ characters[characterIndex].id }.png" srcset="img/character/{ characters[characterIndex].id }@2x.png 2x" alt="{ characters[characterIndex].name.ja } 立ち絵">
         </figure>
     </div>
     <div class="cache">
@@ -43,7 +42,7 @@
         { /each }
     </div>
 </main>
-<svelte:window on:hashchange="updateCurrentByLocationHash()" on:resize="execRefrechDisplayedListItemByResize()"></svelte:window>
+<svelte:window on:hashchange="updateCharacterIndexByLocationHash()" on:resize="execRefreshMenuGroupMaxItemSizeByResize()"></svelte:window>
 
 <style>
     main {
@@ -106,6 +105,9 @@
     }
 
     menu {
+        --group-index: 0;
+        --group-size: 3;
+        --last-rest-item-size: 7;
         width: calc(100% - 160px);
         height: 80px;
         overflow: hidden;
@@ -116,12 +118,20 @@
 
     menu > div {
         height: 100%;
+        width: calc(100% * var(--group-size));
+        transform: translateX(calc(-100% / var(--group-size) * var(--group-index)));
     }
 
     menu > div > div {
         height: 100%;
+        width: calc(100% / var(--group-size));
         display: flex;
         float: left;
+    }
+
+    menu > div > div:last-child::after {
+        content: "";
+        flex: var(--last-rest-item-size) 1 calc(81px * var(--last-rest-item-size));
     }
 
     li {
@@ -241,6 +251,7 @@
 
 <script>
     const swipeThreshold = 30;
+    const resizeThrottle = 50;
     const imageWidth = 81;
     const characters = Object.freeze([
         { id: "alice", name: { ja: "アリス", en: "Alice" }, cv: "新藤若菜", description: "主人公の魔女。わがままでいいかげんな性格で、領主の仕事を放り出していつも町でフラフラしている。しかし、ある事件がきっかけで世界を巻き込む戦争に身を投じる事になる。" },
@@ -274,110 +285,90 @@
     export default {
         data() {
             return {
-                displayedListRow: 0,
-                displayedMaxListItem: 6,
-                current: 0,
+                menuGroupMaxItemSize: 11,
+                characterIndex: 0,
                 characters,
             };
         },
 
         computed: {
-            displayedListRow: ({ current, displayedMaxListItem }) => current / displayedMaxListItem | 0,
-            characterRowItems: ({ characters, displayedMaxListItem }) => {
+            menuGroupIndex: ({ characterIndex, menuGroupMaxItemSize }) => characterIndex / menuGroupMaxItemSize | 0,
+            menuGroups: ({ characters, menuGroupMaxItemSize }) => {
                 const ret = [];
-                for (let i = 0, l = Math.ceil(characters.length / displayedMaxListItem); i < l; ++i) {
-                    ret.push(characters.slice(i * displayedMaxListItem, (i + 1) * displayedMaxListItem));
+                for (let i = 0, l = Math.ceil(characters.length / menuGroupMaxItemSize); i < l; ++i) {
+                    ret.push(characters.slice(i * menuGroupMaxItemSize, (i + 1) * menuGroupMaxItemSize));
                 }
                 return ret;
             },
         },
 
         methods: {
-            refreshDisplayedListItem() {
-                const { displayedMaxListItem, characterRowItems } = this.get();
+            refreshMenuGroupMaxItemSize() {
+                const { menuGroupMaxItemSize } = this.get();
                 const { menu } = this.refs;
                 const width = menu.offsetWidth;
 
-                const changedDisplayedMaxListItem = width / imageWidth | 0;
-                if (displayedMaxListItem === changedDisplayedMaxListItem) { return; }
+                const changedMenuGroupMaxItemSize = width / imageWidth | 0;
+                if (menuGroupMaxItemSize === changedMenuGroupMaxItemSize) { return; }
 
-                this.set({ displayedMaxListItem: changedDisplayedMaxListItem });
+                this.set({ menuGroupMaxItemSize: changedMenuGroupMaxItemSize });
             },
 
-            execRefrechDisplayedListItemByResize() {
-                const oldWidth = this._oldWidth;
-                const { menu, outer } = this.refs;
-                const currentWidth = menu.offsetWidth;
-                if (currentWidth === oldWidth) { return; }
+            execRefreshMenuGroupMaxItemSizeByResize() {
+                // throttle
+                const timestamp = Date.now();
+                if (timestamp - this._oldResizeTimestamp < resizeThrottle) { return; }
 
-                this.refreshDisplayedListItem();
-                const { displayedListRow } = this.get();
-                outer.style.transform = `translateX(${ - currentWidth * displayedListRow }px)`;
+                this.refreshMenuGroupMaxItemSize();
 
-                this._oldWidth = currentWidth;
+                this._oldResizeTimestamp = timestamp;
             },
 
-            updateCurrentByLocationHash() {
+            updateCharacterIndexByLocationHash() {
                 const { characters } = this.get();
                 const hash = location.hash;
                 const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
                 if (index === -1) { return; }
 
-                this.set({ current: index });
+                this.set({ characterIndex: index });
             },
         },
 
         onstate({ changed, current }) {
-            // arrow がクリックされたり、swipe されて displayedListRow が変更されるのを監視する
-            if (this.isCreated && changed.displayedListRow) {
-                const { characterRowItems, displayedListRow } = current;
-                const length = characterRowItems.length;
-                const { menu, outer } = this.refs;
+            if (changed.menuGroups || changed.menuGroupIndex) {
+                const { menuGroups, menuGroupIndex } = current;
+                const groupSize = menuGroups.length;
+                const { menu } = this.refs;
 
-                let currentDisplayedListRow = displayedListRow % length;
-                if (currentDisplayedListRow < 0) {
-                    currentDisplayedListRow += length;
+                let currentmenuGroupIndex = menuGroupIndex % groupSize;
+                if (currentmenuGroupIndex < 0) {
+                    currentmenuGroupIndex += groupSize;
                 }
 
                 // menu > div の位置を変える
-                outer.style.transform = `translateX(${ - menu.offsetWidth * currentDisplayedListRow }px)`;
+                menu.style.setProperty("--group-index", currentmenuGroupIndex);
             }
 
-            // menu がリサイズされて　displayedMaxListItem が変更されるのを監視する
-            if(changed.displayedMaxListItem) {
-                const { characterRowItems, displayedMaxListItem } = current;
-                const rowNum = characterRowItems.length;
-                const { outer } = this.refs;
+            // menu がリサイズされて　menuGroupMaxItemSize が変更されるのを監視する
+            if(changed.menuGroups || changed.menuGroupMaxItemSize) {
+                const { menuGroups, menuGroupMaxItemSize } = current;
+                const groupSize = menuGroups.length;
+                const { menu } = this.refs;
 
-                // menu > div の width を合わせる
-                outer.style.width = `${ 100 * rowNum }%`;
-
-                // menu > div > div の width を合わせる
-                for (const div of outer.childNodes) {
-                    div.style.width = `calc(100% / ${ rowNum })`;
-                }
+                menu.style.setProperty("--group-size", groupSize);
 
                 // 最後の行を左寄せにする
-                if (displayedMaxListItem !== 1) {
-                    const rest = displayedMaxListItem - characterRowItems[characterRowItems.length - 1].length;
-                    this.refs.style.textContent = `main menu > div > div:last-child::after { content: ""; flex: ${ rest } 1 ${ imageWidth * rest }px; }`;
-                } else {
-                    this.refs.style.textContent = "";
-                }
+                const rest = menuGroupMaxItemSize - menuGroups[menuGroups.length - 1].length;
+                menu.style.setProperty("--last-rest-item-size", rest);
             }
         },
 
         oncreate() {
-            // menu の表示領域を確認して、displayedMaxListItem を変更したり style を変える
-            this.refreshDisplayedListItem();
+            // menu の表示領域を確認して、menuGroupMaxItemSize を変更する
+            this.refreshMenuGroupMaxItemSize();
 
-            // location.hash で初期値の設定
-            this.updateCurrentByLocationHash();
-
-            // execRefrechDisplayedListItemByResize で使うプロパティの設定
-            this._oldWidth = this.refs.menu.offsetWidth;
-
-            this.isCreated = true;
+            // location.hash で characterIndex の設定
+            this.updateCharacterIndexByLocationHash();
         },
 
         events: {
@@ -387,12 +378,12 @@
                         const x = e.touches[0].clientX;
 
                         node.addEventListener("touchend", e => {
-                            const { displayedListRow } = this.get();
+                            const { menuGroupIndex } = this.get();
                             const dx = e.changedTouches[0].clientX - x;
                             if (dx < -swipeThreshold) {
-                                this.set({ displayedListRow: displayedListRow + 1 });
+                                this.set({ menuGroupIndex: menuGroupIndex + 1 });
                             } else if (dx > swipeThreshold) {
-                                this.set({ displayedListRow: displayedListRow - 1 });
+                                this.set({ menuGroupIndex: menuGroupIndex - 1 });
                             }
                         }, { once: true });
                     }
