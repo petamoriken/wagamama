@@ -6,7 +6,7 @@
             <button on:tap="set({ menuGroupIndex: menuGroupIndex - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
             <button on:tap="set({ menuGroupIndex: menuGroupIndex + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
             <menu ref:menu>
-                <div on:swipe>
+                <div on:swipe="swipeMenuHandler(event)">
                     { #each menuGroups as group, i }
                         <div hidden="{ menuGroupIndex !== i }">
                             { #each group as character, j }
@@ -36,7 +36,7 @@
             <img src="img/character/{ characters[characterIndex].id }.png" srcset="img/character/{ characters[characterIndex].id }@2x.png 2x" alt="{ characters[characterIndex].name.ja } 立ち絵">
         </figure>
     </div>
-    <div class="cache">
+    <div hidden>
         { #each characters as character }
             { character.name.ja }{ character.name.en }{ character.cv }{ character.description }
         { /each }
@@ -48,10 +48,6 @@
     main {
         width: 100%;
         color: #eee;
-    }
-
-    main .cache {
-        display: none;
     }
 
     .wrapper {
@@ -108,6 +104,7 @@
         --group-index: 0;
         --group-size: 3;
         --last-rest-item-size: 7;
+        --current-delta-x: 0;
         width: calc(100% - 160px);
         height: 80px;
         overflow: hidden;
@@ -119,7 +116,7 @@
     menu > div {
         height: 100%;
         width: calc(100% * var(--group-size));
-        transform: translateX(calc(-100% / var(--group-size) * var(--group-index)));
+        transform: translateX(calc(-100% / var(--group-size) * var(--group-index))) translateX(calc(1px * var(--current-delta-x)));
     }
 
     menu > div > div {
@@ -332,6 +329,27 @@
 
                 this.set({ characterIndex: index });
             },
+
+            swipeMenuHandler({ deltaX, ended }) {
+                const { menu } = this.refs;
+
+                // touchmove
+                if (!ended) {
+                    const dx = Math.min(Math.max(-swipeThreshold * 1.5, deltaX), swipeThreshold * 1.5);
+                    menu.style.setProperty("--current-delta-x", Math.min(dx, swipeThreshold));
+
+                // touchend
+                } else {
+                    menu.style.setProperty("--current-delta-x", 0);
+
+                    const { menuGroupIndex } = this.get();
+                    if (deltaX < -swipeThreshold) {
+                        this.set({ menuGroupIndex: menuGroupIndex + 1 });
+                    } else if (deltaX > swipeThreshold) {
+                        this.set({ menuGroupIndex: menuGroupIndex - 1 });
+                    }
+                }
+            }
         },
 
         onstate({ changed, current }) {
@@ -375,17 +393,20 @@
             swipe(node, callback) {
                 if ("ontouchstart" in window) {
                     const ontouchstart = e => {
-                        const x = e.touches[0].clientX;
+                        const startX = e.touches[0].clientX;
 
-                        node.addEventListener("touchend", e => {
-                            const { menuGroupIndex } = this.get();
-                            const dx = e.changedTouches[0].clientX - x;
-                            if (dx < -swipeThreshold) {
-                                this.set({ menuGroupIndex: menuGroupIndex + 1 });
-                            } else if (dx > swipeThreshold) {
-                                this.set({ menuGroupIndex: menuGroupIndex - 1 });
-                            }
-                        }, { once: true });
+                        const ontouchmove = e => {
+                            const touch = e.changedTouches[0];
+                            callback({ deltaX: touch.clientX - startX, ended: false });
+                        }
+                        node.addEventListener("touchmove", ontouchmove);
+
+                        node.addEventListener("touchend", function ontouchend(e) {
+                            const touch = e.changedTouches[0];
+                            callback({ deltaX: touch.clientX - startX, ended: true });
+                            node.removeEventListener("touchmove", ontouchmove);
+                            node.removeEventListener("touchend", ontouchend);
+                        });
                     }
                     node.addEventListener("touchstart", ontouchstart);
 

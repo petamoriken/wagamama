@@ -11,12 +11,11 @@ module.exports = {
     "node": true
   },
   rules: {
-    "quotes": [2, "double", "avoid-escape"],
-    "no-console": [0],
-    "no-unused-vars": [1, {"vars": "all", "args": "after-used"}],
-    "no-return-await": [1],
-    "eol-last": [0],
-    "no-mixed-requires": [0],
-    "no-underscore-dangle": [0]
+    "comma-dangle": ["error", "always-multiline"],
+    "quotes": ["error", "double", "avoid-escape"],
+    "no-console": ["warn"],
+    "no-unused-vars": ["warn", {"vars": "all", "args": "after-used"}],
+    "no-return-await": ["warn"],
+    "no-underscore-dangle": ["off"],
   }
 };

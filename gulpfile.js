@@ -38,15 +38,14 @@ gulp.task("asset", () => {
     }
 
     return gulp.src("src/**/*.png", { since: gulp.lastRun("static") })
-        .pipe($.imagemin(
-            [pngquant({quality: "40-70", speed: 1})]
-        )).pipe(gulp.dest(output));
+        .pipe($.imagemin([ pngquant({ quality: "40-70", speed: 1 }) ]))
+        .pipe(gulp.dest(output));
 });
 
 gulp.task("component", () => {
     let css = "";
 
-    return new Promise(resolve => gulp.src("src/component/**", { since: gulp.lastRun("component") })
+    return new Promise((resolve) => gulp.src("src/component/**", { since: gulp.lastRun("component") })
         .pipe($.plumber())
         .pipe($.each((content, file, cb) => {
             const { name, base, dir } = path.parse(file.path);
@@ -72,15 +71,16 @@ gulp.task("component", () => {
 
             if(isDebug) {
                 fs.writeFileSync(outputPath, "");
-                resolve()
+                resolve();
                 return;
             }
+
             postcss([
                 url({ url: "rebase" }),
-                autoprefixer
+                autoprefixer,
             ]).process(css, {
                 from: "style.css",
-                to: "component/style.css"
+                to: "component/style.css",
             }).then(result => {
                 fs.writeFileSync(outputPath, result);
                 resolve();
@@ -105,7 +105,7 @@ gulp.task("deploy", async () => {
         secure: true,
         host: process.env.FTP_HOST,
         user: process.env.FTP_USER,
-        password: process.env.FTP_PASSWORD
+        password: process.env.FTP_PASSWORD,
     });
     const ready = new Promise((resolve, reject) => client.on("ready", error => error ? reject(error) : resolve()));
 
