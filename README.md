@@ -1,6 +1,6 @@
 # wagamama
 わがままアリスと百日戦争のプロモーションサイト  
-http://coromosoft.sub.jp
+http://koromosoft.com/alice1
 
 ## ビルド方法
 
