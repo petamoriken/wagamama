@@ -348,7 +348,7 @@
                 // touchmove
                 if (!ended) {
                     const dx = Math.min(Math.max(-swipeThreshold * 1.5, deltaX), swipeThreshold * 1.5);
-                    menu.style.setProperty("--current-delta-x", Math.min(dx, swipeThreshold));
+                    menu.style.setProperty("--current-delta-x", dx);
 
                 // touchend
                 } else {
