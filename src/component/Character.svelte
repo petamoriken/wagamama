@@ -3,8 +3,8 @@
         <h1><img src="img/heading/character.png" srcset="img/heading/character@2x.png 2x" alt="キャラクター"></h1>
         <hr>
         <nav>
-            <button on:tap="set({ menuGroupIndex: menuGroupIndex - 1 })"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
-            <button on:tap="set({ menuGroupIndex: menuGroupIndex + 1 })"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
+            <button on:tap="updateMenuGroupIndexByInteraction(-1)"><img src="img/accessory/arrow_left.png" srcset="img/accessory/arrow_left@2x.png 2x" alt="メニューを左へ移動"></button>
+            <button on:tap="updateMenuGroupIndexByInteraction(1)"><img src="img/accessory/arrow_right.png" srcset="img/accessory/arrow_right@2x.png 2x" alt="メニューを右へ移動"></button>
             <menu ref:menu>
                 <div on:swipe="swipeMenuHandler(event)">
                     { #each menuGroups as group, i }
@@ -282,6 +282,7 @@
     export default {
         data() {
             return {
+                menuGroupIndex: 0,
                 menuGroupMaxItemSize: 11,
                 characterIndex: 0,
                 characters,
@@ -289,7 +290,6 @@
         },
 
         computed: {
-            menuGroupIndex: ({ characterIndex, menuGroupMaxItemSize }) => characterIndex / menuGroupMaxItemSize | 0,
             menuGroups: ({ characters, menuGroupMaxItemSize }) => {
                 const ret = [];
                 for (let i = 0, l = Math.ceil(characters.length / menuGroupMaxItemSize); i < l; ++i) {
@@ -301,14 +301,14 @@
 
         methods: {
             refreshMenuGroupMaxItemSize() {
-                const { menuGroupMaxItemSize } = this.get();
+                const { characterIndex, menuGroupMaxItemSize } = this.get();
                 const { menu } = this.refs;
                 const width = menu.offsetWidth;
 
                 const changedMenuGroupMaxItemSize = width / imageWidth | 0;
                 if (menuGroupMaxItemSize === changedMenuGroupMaxItemSize) { return; }
 
-                this.set({ menuGroupMaxItemSize: changedMenuGroupMaxItemSize });
+                this.set({ menuGroupIndex: characterIndex / changedMenuGroupMaxItemSize | 0, menuGroupMaxItemSize: changedMenuGroupMaxItemSize });
             },
 
             execRefreshMenuGroupMaxItemSizeByResize() {
@@ -322,12 +322,24 @@
             },
 
             updateCharacterIndexByLocationHash() {
-                const { characters } = this.get();
+                const { characters, menuGroupMaxItemSize } = this.get();
                 const hash = location.hash;
                 const index = hash ? characters.findIndex(character => `#${ character.id }` === hash) : 0;
                 if (index === -1) { return; }
 
-                this.set({ characterIndex: index });
+                this.set({ menuGroupIndex: index / menuGroupMaxItemSize | 0, characterIndex: index });
+            },
+
+            updateMenuGroupIndexByInteraction(delta) {
+                const { menuGroupIndex, menuGroups } = this.get();
+                const groupSize = menuGroups.length;
+
+                let changedmenuGroupIndex = (menuGroupIndex + delta) % groupSize;
+                if (changedmenuGroupIndex < 0) {
+                    changedmenuGroupIndex += groupSize;
+                }
+
+                this.set({ menuGroupIndex: changedmenuGroupIndex });
             },
 
             swipeMenuHandler({ deltaX, ended }) {
@@ -344,34 +356,28 @@
 
                     const { menuGroupIndex } = this.get();
                     if (deltaX < -swipeThreshold) {
-                        this.set({ menuGroupIndex: menuGroupIndex + 1 });
+                        this.updateMenuGroupIndexByInteraction(1);
                     } else if (deltaX > swipeThreshold) {
-                        this.set({ menuGroupIndex: menuGroupIndex - 1 });
+                        this.updateMenuGroupIndexByInteraction(-1);
                     }
                 }
             }
         },
 
         onstate({ changed, current }) {
-            if (changed.menuGroups || changed.menuGroupIndex) {
-                const { menuGroups, menuGroupIndex } = current;
-                const groupSize = menuGroups.length;
-                const { menu } = this.refs;
+            const { menu } = this.refs;
 
-                let currentmenuGroupIndex = menuGroupIndex % groupSize;
-                if (currentmenuGroupIndex < 0) {
-                    currentmenuGroupIndex += groupSize;
-                }
+            if (changed.menuGroups || changed.menuGroupIndex) {
+                const { menuGroupIndex } = current;
 
                 // menu > div の位置を変える
-                menu.style.setProperty("--group-index", currentmenuGroupIndex);
+                menu.style.setProperty("--group-index", menuGroupIndex);
             }
 
             // menu がリサイズされて　menuGroupMaxItemSize が変更されるのを監視する
             if(changed.menuGroups || changed.menuGroupMaxItemSize) {
                 const { menuGroups, menuGroupMaxItemSize } = current;
                 const groupSize = menuGroups.length;
-                const { menu } = this.refs;
 
                 menu.style.setProperty("--group-size", groupSize);
 
