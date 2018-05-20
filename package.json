@@ -5,18 +5,19 @@
   "main": "index.js",
   "author": "Kenta Moriuchi <moriken@kimamass.com> (https://moriken.kimamass.com)",
   "scripts": {
-    "release": "NODE_ENV=release gulp",
+    "release": "cross-env NODE_ENV=release gulp",
     "build": "gulp",
     "build:static": "gulp static",
     "build:asset": "gulp asset",
     "build:component": "gulp component",
     "watch": "gulp watch",
-    "deploy": "NODE_ENV=release gulp deploy",
+    "deploy": "cross-env NODE_ENV=release gulp deploy",
     "clean": "rm -rf build"
   },
   "devDependencies": {
     "autoprefixer": "^8.3.0",
     "babel-eslint": "^8.2.1",
+    "cross-env": "^5.1.5",
     "eslint": "^4.1.1",
     "ftp": "^0.3.10",
     "gulp": "github:gulpjs/gulp#4.0",
