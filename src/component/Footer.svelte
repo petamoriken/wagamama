@@ -18,7 +18,7 @@
             </dl>
         </dd>
     </dl>
-    <p><small>&copy; 2017 PROJECT WITCH All Rights Reserved.</small></p>
+    <p><small>&copy; 2017 Koromosoft All Rights Reserved.</small></p>
 </footer>
 
 <style>
